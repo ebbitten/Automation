@@ -2,7 +2,7 @@
 import argparse
 import pyautogui,time,winsound,importlib
 pyautogui.PAUSE = 1
-pyautogui.FAILSAFE = True
+pyautogui.FAILSAFE = False
 
 def getCoord():
     counter=0
@@ -47,9 +47,9 @@ def findCoordinates(hw,overLoads,prayerpots):
 
 # findCoordinates(1,7,20)
 
-def runNMZ(oversConsumed=0, ppConsumed=0,overConsumeCounter=305, ppConsumeCounter = 153):
+def runNMZ(oversConsumed=0, ppConsumed=0,overConsumeCounter=310, ppConsumeCounter = 153):
     #TODO upload to Github and start running on other computer
-
+    #Todo: put all coords in one array and then split them based on input
     #TODO load positions from a file
     import helperLoop
 
@@ -71,7 +71,7 @@ def runNMZ(oversConsumed=0, ppConsumed=0,overConsumeCounter=305, ppConsumeCounte
     timeElapsed = curTime-startTime
     consumedList = [oversConsumed,ppConsumed]
     print("starting in 10")
-    while timeElapsed<7200:
+    while timeElapsed<9000:
         importlib.reload(helperLoop)
         curTime=time.time()
         timeElapsed = curTime - startTime
@@ -79,7 +79,7 @@ def runNMZ(oversConsumed=0, ppConsumed=0,overConsumeCounter=305, ppConsumeCounte
         #print(str(consumedList) + "consumed list")
 
 print("initializing")
-runNMZ(10,24)
+runNMZ(11,30)
 
 
 
