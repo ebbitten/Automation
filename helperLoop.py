@@ -3,6 +3,18 @@ import argparse
 import pyautogui,time,winsound,random
 pyautogui.PAUSE = 1
 pyautogui.FAILSAFE = True
+def humanMove(finalx,finaly,totalTime,steps):
+    tweens = [pyautogui.easeOutQuad,pyautogui.easeInQuad,pyautogui.easeInOutQuad]
+    startingPos=pyautogui.position()
+    for i in range(1,steps+1):
+        tweenChoice=random.choice(tweens)
+        x = startingPos[0]*(steps-i)/steps + finalx * (i)/steps
+        y = startingPos[1]*(steps-i)/steps + finaly * (i)/steps
+        if i<steps:
+            x+=random.randint(-20,20)
+            y+=random.randint(-20,20)
+        stepTime = totalTime/steps
+        pyautogui.moveTo(x,y,stepTime,tweenChoice,None,False)
 
 def meleeNMZ(coordsList,timeElapsed,startTime,consumedList,consumedTimer):
     time.sleep(10)
@@ -13,7 +25,8 @@ def meleeNMZ(coordsList,timeElapsed,startTime,consumedList,consumedTimer):
     # a prayer dose restores 154 seconds of prayer
     #0 is over, 1 is pp
     for i in range(2):
-        checkAndConsume(i, consumedTimer, coordsList, consumedList, timeElapsed)
+        if coordsList[i]:
+            checkAndConsume(i, consumedTimer, coordsList, consumedList, timeElapsed)
 
 
 
@@ -25,8 +38,8 @@ def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElaps
         #move to our potion
         x = coordsList[consumedType][0][0] +random.randint(-3,3)
         y = coordsList[consumedType][0][1] +random.randint(-3,3)
-        moveTime = random.randrange(50,80,1)/10
-        pyautogui.moveTo(x, y, moveTime, pyautogui.easeInElastic)
+        moveTime = random.randrange(30,50,1)/10
+        humanMove(x, y, moveTime, 6)
         #click
         try:
             pyautogui.click()
@@ -39,8 +52,8 @@ def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElaps
         #Move to a random location
         x = random.randint(1,screenWidth)
         y = random.randint(1,screenHeight)
-        moveTime = random.randrange(50, 80, 1) / 10
-        pyautogui.moveTo(x, y, moveTime, pyautogui.easeInOutQuad)
+        moveTime = random.randrange(30, 50, 1) / 10
+        humanMove(x, y, moveTime, 6)
         #update our consumption
         consumedList[consumedType] += 1
         if consumedList[consumedType] % 4 == 0:
