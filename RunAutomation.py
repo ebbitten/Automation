@@ -1,6 +1,7 @@
 #requires pyauotgui, pyhook,  pillow,
 import argparse
 import pyautogui,time,winsound
+import importlib
 pyautogui.PAUSE = 1
 pyautogui.FAILSAFE = False
 
@@ -45,7 +46,7 @@ def findCoordinates(hw,overLoads,prayerpots):
     print(ppCords)
     filePath = input("please input a filepath to save the coordinates")
 
-findCoordinates(1,0,0)
+#findCoordinates(1,0,0)
 
 def runNMZ(oversConsumed=0, ppConsumed=0,overConsumeCounter=310, ppConsumeCounter = 150):
     #TODO upload to Github and start running on other computer
@@ -78,8 +79,40 @@ def runNMZ(oversConsumed=0, ppConsumed=0,overConsumeCounter=310, ppConsumeCounte
         timeElapsed = curTime - startTime
         helperLoop.meleeNMZ(coordsList,timeElapsed,startTime,consumedList,consumedCounter)
         #print(str(consumedList) + "consumed list")
-#requires pyauotgui, pyhook,  pillow
-import argparse
+        
+def runNMZAbsorp(oversConsumed=0, absorpConsumed=0,overConsumeCounter=310, absorpConsumeCounter = 50):
+    #TODO upload to Github and start running on other computer
+    #Todo: put all coords in one array and then split them based on input
+    #TODO load positions from a file
+    import helperLoop
+
+    startTime = time.time()
+    curTime = time.time()
+    lastHeal = time.time()
+    overCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],[1155, 330], [1194, 329], [1238, 331]]
+    absorpCoords = [[1279, 333], [1155, 368], [1198, 368], [1238, 369], [1280, 365], [1155, 405], [1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438], [1235, 442], [1281, 441], [1154, 477], [1194, 477], [1239, 474], [1280, 476]]
+    rapidHeal = [1293, 295]
+    consumedCounter = [overConsumeCounter,absorpConsumed]
+    if oversConsumed>0:
+        for i in range(oversConsumed//4):
+            overCoords.pop(0)
+    if absorpConsumed>0:
+        for i in range(absorpConsumed//4):
+            absorpCoords.pop(0)
+    if absorpConsumed>0 or oversConsumed>0:
+        timeElapsed=max(absorpConsumed*absorpConsumeCounter,oversConsumed*overConsumeCounter)
+        startTime=curTime-timeElapsed
+    coordsList = [overCoords,absorpCoords]
+    timeElapsed = curTime-startTime
+    consumedList = [oversConsumed,absorpConsumed]
+    print("starting in 10")
+    while timeElapsed<12000:
+        importlib.reload(helperLoop)
+        curTime=time.time()
+        timeElapsed = curTime - startTime
+        lastHeal = helperLoop.absorpNMZ(coordsList,timeElapsed,startTime,consumedList,consumedCounter,lastHeal,rapidHeal)
+        #print(str(consumedList) + "consumed list")
+
 import pyautogui,time,winsound,random
 pyautogui.PAUSE = 1
 pyautogui.FAILSAFE = True
