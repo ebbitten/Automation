@@ -1,8 +1,8 @@
-#requires pyauotgui, pyhook,  pillow
 import argparse
+
 import pyautogui,time,winsound,random
-pyautogui.PAUSE = 1
-pyautogui.FAILSAFE = True
+pyautogui.PAUSE = 0
+pyautogui.FAILSAFE = False
 def humanMove(finalx,finaly,totalTime,steps):
     tweens = [pyautogui.easeOutQuad,pyautogui.easeInQuad,pyautogui.easeInOutQuad]
     startingPos=pyautogui.position()
@@ -28,6 +28,22 @@ def meleeNMZ(coordsList,timeElapsed,startTime,consumedList,consumedTimer):
         if coordsList[i]:
             checkAndConsume(i, consumedTimer, coordsList, consumedList, timeElapsed)
 
+def absorpNMZ(coordsList,timeElapsed,startTime,consumedList,consumedTimer,lastHeal,rapidHeal):
+    time.sleep(1)
+    curTime = time.time()
+    timeElapsed = curTime - startTime
+    print("time elapsed is " + str(timeElapsed))
+    # Check if we should drink a prayerpot
+    # a prayer dose restores 154 seconds of prayer
+    #0 is over, 1 is pp
+    for i in range(2):
+        if coordsList[i]:
+            checkAndConsume(i, consumedTimer, coordsList, consumedList, timeElapsed)
+    if time.time() - lastHeal >30:
+        flickPray(rapidHeal)
+        lastHeal=time.time()
+    return lastHeal
+
 
 
 def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElapsed):
@@ -38,28 +54,45 @@ def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElaps
         #move to our potion
         x = coordsList[consumedType][0][0] +random.randint(-3,3)
         y = coordsList[consumedType][0][1] +random.randint(-3,3)
-        moveTime = random.randrange(30,50,1)/10
-        humanMove(x, y, moveTime, 6)
+        moveTime = random.randrange(20,40,1)/10
+        humanMove(x, y, moveTime, 3)
         #click
-        try:
-            pyautogui.click()
-        except:
-            try:
-                pyautogui.click()
-            except:
-                pass
-        screenWidth, screenHeight = pyautogui.size()
+        doClick(duration=random.randint(15,25)/100)
+        time.sleep(.5)
         #Move to a random location
-        x = random.randint(1,screenWidth)
-        y = random.randint(1,screenHeight)
-        moveTime = random.randrange(30, 50, 1) / 10
-        humanMove(x, y, moveTime, 6)
+        # screenWidth, screenHeight = pyautogui.size()
+        # x = random.randint(1,screenWidth)
+        # y = random.randint(1,screenHeight)
+        # moveTime = random.randrange(15, 30, 1) / 10
+        # humanMove(x, y, moveTime, 3)
         #update our consumption
         consumedList[consumedType] += 1
         if consumedList[consumedType] % 4 == 0:
             coordsList[consumedType].pop(0)
 
 
+def flickPray(rapidHeal):
+    randInterval = random.randint(20,30)/100
+    pyautogui.press('f5', interval=randInterval)
+    time.sleep(random.randint(25, 35) / 100)
+    randInterval = random.randint(20, 30) / 10
+    humanMove(rapidHeal[0],rapidHeal[1],randInterval,2)
+    doClick(clicks = 1, duration = (random.randint(20,30)/100))
+    time.sleep(random.randint(150, 200) / 100)
+    doClick(clicks=1, duration=(random.randint(20, 30) / 100))
+    time.sleep(random.randint(150,200)/100)
+    randInterval = random.randint(20, 30) / 100
+    pyautogui.press('esc', interval=randInterval)
+
+
+def doClick(clicks=1, interval=0.0, button='left', duration=0.0,):
+    try:
+        pyautogui.click(clicks=clicks, interval = interval, button = button, duration = duration)
+    except:
+        try:
+            pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
+        except:
+            pass
 
 def extraStuff():
     # screenWidth, screenHeight = pyautogui.size()
