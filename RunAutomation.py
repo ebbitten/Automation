@@ -87,7 +87,7 @@ def runNMZ(oversConsumed=0, ppConsumed=0, overConsumeCounter=310, ppConsumeCount
         # print(str(consumedList) + "consumed list")
 
 
-def runNMZAbsorp(oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=130):
+def runNMZAbsorp(oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=160, numOvers=10, numAbsorps=16):
     # TODO upload to Github and start running on other computer
     # Todo: put all coords in one array and then split them based on input
     # TODO load positions from a file
@@ -97,11 +97,18 @@ def runNMZAbsorp(oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, abso
     curTime = time.time()
     lastHeal = time.time()
     # #Lenovo Y570
-    overCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],
-                  [1155, 330], [1194, 329]]
-    absorpCoords = [[1238, 331], [1279, 333], [1155, 368], [1198, 368], [1238, 369], [1280, 365], [1155, 405],
-                    [1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438], [1235, 442], [1281, 441],
-                    [1154, 477], [1194, 477], [1239, 474], [1280, 476]]
+    invenCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],
+                   [1155, 330], [1194, 329], [1238, 331], [1279, 333], [1155, 368], [1198, 368], [1238, 369],
+                   [1280, 365], [1155, 405],[1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438],
+                   [1235, 442], [1281, 441],[1154, 477], [1194, 477], [1239, 474], [1280, 476]]
+    #overCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],
+    #              [1155, 330], [1194, 329]]
+    #absorpCoords = [[1238, 331], [1279, 333], [1155, 368], [1198, 368], [1238, 369], [1280, 365], [1155, 405],
+    #                [1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438], [1235, 442], [1281, 441],
+    #                [1154, 477], [1194, 477], [1239, 474], [1280, 476]]
+    overCoords = invenCoords[:numOvers-1]
+    absorpCoords = invenCoords[numOvers:numAbsorps-1]
+    
     rapidHeal = [1293, 295]
 
     # Lenovo T450s
@@ -404,5 +411,5 @@ def checkAndConsume(consumedType, consumedTimer, coordsList, consumedList, timeE
 
 
 print("initializing")
-runNMZAbsorp(0, 0, 320, 140)
+runNMZAbsorp(0, 0, 320, 170, 10, 16)
 # findCoordinates(1,7,20)
