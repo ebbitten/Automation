@@ -69,7 +69,9 @@ def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElaps
         consumedList[consumedType] += 1
         if consumedList[consumedType] % 4 == 0:
             coordsList[consumedType].pop(0)
-
+        if typename[consumedType]=="Overload" and len(coordsList[consumedType])==1 and consumedList[consumedType] % 4 == 3:
+            coordsList[consumedType].pop(0)
+            consumedList[consumedType] += 1
 
 def flickPray(rapidHeal):
     randInterval = random.randint(20,30)/100
