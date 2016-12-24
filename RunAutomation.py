@@ -87,36 +87,38 @@ def runNMZ(oversConsumed=0, ppConsumed=0, overConsumeCounter=310, ppConsumeCount
         # print(str(consumedList) + "consumed list")
 
 
-def runNMZAbsorp(oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=160, numOvers=10, numAbsorps=16):
+def runNMZAbsorp(laptopType = "Y570" oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=160, numOvers=10, numAbsorps=16):
     # TODO upload to Github and start running on other computer
     # Todo: put all coords in one array and then split them based on input
     # TODO load positions from a file
     #TODO initialize should include getting your HP down
     import helperLoop
-
+    #start timer
     startTime = time.time()
     curTime = time.time()
     lastHeal = time.time()
-    # #Lenovo Y570
-    invenCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],
-                   [1155, 330], [1194, 329], [1238, 331], [1279, 333], [1155, 368], [1198, 368], [1238, 369],
-                   [1280, 365], [1155, 405],[1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438],
-                   [1235, 442], [1281, 441],[1154, 477], [1194, 477], [1239, 474], [1280, 476]]
-    #overCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],
-    #              [1155, 330], [1194, 329]]
-    #absorpCoords = [[1238, 331], [1279, 333], [1155, 368], [1198, 368], [1238, 369], [1280, 365], [1155, 405],
-    #                [1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438], [1235, 442], [1281, 441],
-    #                [1154, 477], [1194, 477], [1239, 474], [1280, 476]]
+
+    #determine the coordinate set we're using
+    if laptopType == "Y570":
+        invenCoords = [[1195, 256], [1237, 259], [1280, 256], [1155, 288], [1194, 294], [1235, 295], [1279, 292],
+                       [1155, 330], [1194, 329], [1238, 331], [1279, 333], [1155, 368], [1198, 368], [1238, 369],
+                       [1280, 365], [1155, 405],[1197, 404], [1239, 402], [1278, 403], [1152, 438], [1196, 438],
+                       [1235, 442], [1281, 441],[1154, 477], [1194, 477], [1239, 474], [1280, 476]]
+        rapidHeal = [1293, 295]
+    else:
+        invenCoords = [[878, 254], [921, 253], [961, 251], [832, 293],[876, 290], [917, 290], [960, 292],
+                   [835, 325], [876, 328], [917, 326], [958, 326], [835, 362], [875, 361], [917, 365],
+                   [960, 363], [834, 400], [878, 400], [918, 400], [958, 399],[833, 436], [878, 436],
+                   [917, 435], [958, 433], [833, 465], [877, 470], [916, 471], [958, 471]]
+        rapidHeal = [971, 288]
+
+
+    #parse that coordinate let into arrays that we'll use to loop over    
     overCoords = invenCoords[:numOvers]
     absorpCoords = invenCoords[numOvers:numAbsorps+numOvers]
-    
-    rapidHeal = [1293, 295]
-
-    # Lenovo T450s
-    ##    overCoords = [[878, 254], [921, 253], [961, 251], [832, 293], [876, 290], [917, 290], [960, 292]]
-    ##    absorpCoords = [[835, 325], [876, 328], [917, 326], [958, 326], [835, 362], [875, 361], [917, 365], [960, 363], [834, 400], [878, 400], [918, 400], [958, 399], [833, 436], [878, 436], [917, 435], [958, 433], [833, 465], [877, 470], [916, 471], [958, 471]]
-    ##    rapidHeal = [971, 288]
+    #update consumed counter if we passed any in
     consumedCounter = [overConsumeCounter, absorpConsumeCounter]
+    #decrement the amount that we have left based on our consumed counter
     if oversConsumed > 0:
         for i in range(oversConsumed // 4):
             overCoords.pop(0)
@@ -124,15 +126,18 @@ def runNMZAbsorp(oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, abso
         for i in range(absorpConsumed // 4):
             absorpCoords.pop(0)
 
-    # jk do need it
+    #update how much time had previously passed based on the consumed counter
     if absorpConsumed > 0 or oversConsumed > 0:
         timeElapsed = max(absorpConsumed * absorpConsumeCounter, oversConsumed * overConsumeCounter)
         startTime = curTime - timeElapsed
+    #make our coordinate list that we'll loop over
     coordsList = [overCoords, absorpCoords]
+    #initialzie time elapsed
     timeElapsed = curTime - startTime
+    #Make the list for how many we'll consider consumed
     consumedList = [oversConsumed, absorpConsumed]
-    print("starting in 10")
-    time.sleep(10)
+    print("starting in 5")
+    time.sleep(5)
     while timeElapsed < 16000:
         importlib.reload(helperLoop)
         curTime = time.time()
@@ -146,7 +151,7 @@ def runNMZAbsorp(oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, abso
 
 
 print("initializing")
-runNMZAbsorp(0, 0, 320, 125,8,17)
+runNMZAbsorp("Y570",0, 0, 320, 125,8,17)
 # findCoordinates(1,7,20)
 # requires pyauotgui, pyhook,  pillow,
 import argparse
