@@ -87,7 +87,7 @@ def runNMZ(oversConsumed=0, ppConsumed=0, overConsumeCounter=310, ppConsumeCount
         # print(str(consumedList) + "consumed list")
 
 
-def runNMZAbsorp(laptopType = "Y570" oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=160, numOvers=10, numAbsorps=16):
+def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=160, numOvers=10, numAbsorps=16):
     # TODO upload to Github and start running on other computer
     # Todo: put all coords in one array and then split them based on input
     # TODO load positions from a file
@@ -151,7 +151,7 @@ def runNMZAbsorp(laptopType = "Y570" oversConsumed=0, absorpConsumed=0, overCons
 
 
 print("initializing")
-runNMZAbsorp("Y570",0, 0, 320, 125,8,17)
+#runNMZAbsorp("Y570",0, 0, 320, 125,8,17)
 # findCoordinates(1,7,20)
 # requires pyauotgui, pyhook,  pillow,
 import argparse
