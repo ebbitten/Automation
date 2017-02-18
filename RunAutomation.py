@@ -2,6 +2,7 @@
 import argparse
 import pyautogui, time, winsound
 import importlib
+import random
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
@@ -138,7 +139,7 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
     consumedList = [oversConsumed, absorpConsumed]
     print("starting in 5")
     time.sleep(5)
-    while timeElapsed < 16000:
+    while timeElapsed < 20000:
         importlib.reload(helperLoop)
         curTime = time.time()
         timeElapsed = curTime - startTime
@@ -151,10 +152,8 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
 
 
 print("initializing")
-#runNMZAbsorp("Y570",0, 0, 320, 125,8,17)
+runNMZAbsorp("Y570",0, 0, 320, 270 ,13,12)
 # findCoordinates(1,7,20)
 # requires pyauotgui, pyhook,  pillow,
-import argparse
-import pyautogui, time, winsound
-import importlib
+
 
