@@ -3,9 +3,9 @@ import argparse
 import pyautogui, time, winsound
 import importlib
 import random
-
+import helperLoop
 pyautogui.PAUSE = 0
-pyautogui.FAILSAFE = False
+pyautogui.FAILSAFE = True
 
 
 def getCoord():
@@ -150,10 +150,56 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
             break
 
 
+def tanDragonHides(hides):
+    locations = [[677, 139], [1076, 67], [1828, 832], [1007, 519], [1751, 783]]
+    print('initiating...')
+    time.sleep(5)
+    actionsList = (('easyMove(locations[0])','easyPress("num5")','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
+                   ('easyMove(locations[1])','easyClick()'),
+                   ('easyMove(locations[2])','time.sleep(3)','clickWait(6)'),
+                   ('easyMove(locations[3])','easyClick()','time.sleep(1.2)'),
+                   ('easyMove(locations[4])','easyPress("num5")','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)')
+               )
+    for i in range(int(hides//25)):
+        actionsListc = actionsList[:]
+        print('on hides number: ' + str(i * 25))
+        for actions in actionsListc:
+            for action in actions:
+                print(str(action))
 
-print("initializing")
-runNMZAbsorp("Y570",0, 0, 320, 270 ,13,12)
-# findCoordinates(1,7,20)
+                exec(action)
+            randomSleep()
+
+def clickWait(num):
+    for i in range(num):
+        easyClick()
+        time.sleep(abs(random.normalvariate(1.4, .1)))
+        randomSleep()
+
+def randomSleep():
+    if random.random() < .01:
+        time.sleep(abs(random.normalvariate(40,5)))
+    if random.random() < .1:
+        time.sleep(abs(random.normalvariate(7,3)))
+    if random.random() < .002:
+        print('browsing')
+        helperLoop.randomBrowsing()
+
+def easyMove(location):
+    helperLoop.humanMove(location[0],location[1],1.2,8)
+
+def easyPress(key):
+    pyautogui.press(key, interval = (random.normalvariate(25,5)/100))
+
+def easyClick():
+    helperLoop.doClick(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+
+#print("initializing")
+#runNMZAbsorp("Y570",0, 0, 320, 190 , 10, 14)
+#findCoordinates(1,0,0)
 # requires pyauotgui, pyhook,  pillow,
 
+tanDragonHides(5000)
 
+
+#521xhz4FRkTc

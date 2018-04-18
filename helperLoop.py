@@ -3,18 +3,7 @@ import argparse
 import pyautogui,time,winsound,random
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
-def humanMove(finalx,finaly,totalTime,steps):
-    tweens = [pyautogui.easeOutQuad,pyautogui.easeInQuad,pyautogui.easeInOutQuad]
-    startingPos=pyautogui.position()
-    for i in range(1,steps+1):
-        tweenChoice=random.choice(tweens)
-        x = startingPos[0]*(steps-i)/steps + finalx * (i)/steps
-        y = startingPos[1]*(steps-i)/steps + finaly * (i)/steps
-        if i<steps:
-            x+=random.randint(-20,20)
-            y+=random.randint(-20,20)
-        stepTime = totalTime/steps
-        pyautogui.moveTo(x,y,stepTime,tweenChoice,None,False)
+
 
 def meleeNMZ(coordsList,timeElapsed,startTime,consumedList,consumedTimer):
     time.sleep(10)
@@ -52,19 +41,16 @@ def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElaps
         print(("Drinking " + str(typename[consumedType])+"\n")*3)
         time.sleep(2)
         #move to our potion
-        x = coordsList[consumedType][0][0] +random.randint(-3,3)
-        y = coordsList[consumedType][0][1] +random.randint(-3,3)
+        x = coordsList[consumedType][0][0] +random.normalvariate(0,2)
+        y = coordsList[consumedType][0][1] +random.normalvariate(0,2)
         moveTime = random.randrange(20,40,1)/10
         humanMove(x, y, moveTime, 3)
         #click
-        doClick(duration=random.randint(15,25)/100)
+        doClick(duration=random.normalvariate(20,3)/100)
         time.sleep(.5)
-        #Move to a random location
-        # screenWidth, screenHeight = pyautogui.size()
-        # x = random.randint(1,screenWidth)
-        # y = random.randint(1,screenHeight)
-        # moveTime = random.randrange(15, 30, 1) / 10
-        # humanMove(x, y, moveTime, 3)
+        #Move to a random location occasionly
+        if random.randint(0,20) > 19:
+            randomBrowsing()
         #update our consumption
         consumedList[consumedType] += 1
         if consumedList[consumedType] % 4 == 0:
@@ -77,15 +63,35 @@ def flickPray(rapidHeal):
     randInterval = random.randint(20,30)/100
     pyautogui.press('f5', interval=randInterval)
     time.sleep(random.randint(25, 35) / 100)
-    randInterval = random.randint(20, 30) / 10
+    randInterval = random.normalvariate(25, 3) / 10
     humanMove(rapidHeal[0],rapidHeal[1],randInterval,2)
-    doClick(clicks = 1, duration = (random.randint(20,30)/100))
+    doClick(clicks = 1, duration = (random.normalvariate(25, 3)/100))
     time.sleep(random.randint(150, 200) / 100)
-    doClick(clicks=1, duration=(random.randint(20, 30) / 100))
-    time.sleep(random.randint(150,200)/100)
-    randInterval = random.randint(20, 30) / 100
+    doClick(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+    time.sleep(random.normalvariate(175,15)/100)
+    randInterval = random.normalvariate(25, 3) / 100
     pyautogui.press('esc', interval=randInterval)
 
+
+def humanMove(finalx,finaly,totalTime,steps):
+    tweens = [pyautogui.easeOutQuad,pyautogui.easeInQuad,pyautogui.easeInOutQuad]
+    startingPos=pyautogui.position()
+    #If we're already on the spot just go ahead and get ready to click
+    if ((abs(finalx - startingPos[0])+abs(finaly - startingPos[1]))**.5) < 5:
+        return
+    #otherwise move there over a series of steps
+    for i in range(1,steps+1):
+        tweenChoice=random.choice(tweens)
+        x = startingPos[0]*(steps-i)/steps + finalx * (i)/steps
+        y = startingPos[1]*(steps-i)/steps + finaly * (i)/steps
+        if i < steps:
+            x +=random.normalvariate(0,5)
+            y +=random.normalvariate(0,5)
+        elif i == steps:
+            x += random.normalvariate(0,3)
+            y += random.normalvariate(0,3)
+        stepTime = totalTime/steps
+        pyautogui.moveTo(x,y,stepTime,tweenChoice,None,False)
 
 def doClick(clicks=1, interval=0.0, button='left', duration=0.0,):
     try:
@@ -95,6 +101,13 @@ def doClick(clicks=1, interval=0.0, button='left', duration=0.0,):
             pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
         except:
             pass
+
+def randomBrowsing():
+    screenWidth, screenHeight = pyautogui.size()
+    x = random.randint(1,screenWidth)
+    y = random.randint(1,screenHeight)
+    moveTime = random.randrange(15, 30, 1) / 10
+    humanMove(x, y, moveTime, 4)
 
 def extraStuff():
     # screenWidth, screenHeight = pyautogui.size()
