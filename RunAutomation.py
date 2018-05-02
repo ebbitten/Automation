@@ -154,11 +154,11 @@ def tanDragonHides(hides):
     locations = [[677, 139], [1076, 67], [1828, 832], [1007, 519], [1751, 783]]
     print('initiating...')
     time.sleep(5)
-    actionsList = (('easyMove(locations[0])','easyPress("num5")','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
+    actionsList = (('easyMove(locations[0])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
                    ('easyMove(locations[1])','easyClick()'),
                    ('easyMove(locations[2])','time.sleep(3)','clickWait(6)'),
                    ('easyMove(locations[3])','easyClick()','time.sleep(1.2)'),
-                   ('easyMove(locations[4])','easyPress("num5")','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)')
+                   ('easyMove(locations[4])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)')
                )
     for i in range(int(hides//25)):
         actionsListc = actionsList[:]
