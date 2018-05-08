@@ -168,7 +168,7 @@ def tanDragonHides(hides):
                 print(str(action))
 
                 exec(action)
-                time.sleep(.20)
+                time.sleep(.21)
             randomSleep()
 
 def clickWait(num):
