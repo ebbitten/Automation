@@ -168,6 +168,7 @@ def tanDragonHides(hides):
                 print(str(action))
 
                 exec(action)
+                time.sleep(.20)
             randomSleep()
 
 def clickWait(num):
@@ -179,7 +180,7 @@ def clickWait(num):
 def randomSleep():
     if random.random() < .01:
         time.sleep(abs(random.normalvariate(40,5)))
-    if random.random() < .1:
+    if random.random() < .05:
         time.sleep(abs(random.normalvariate(7,3)))
     if random.random() < .002:
         print('browsing')
@@ -199,7 +200,7 @@ def easyClick():
 #findCoordinates(1,0,0)
 # requires pyauotgui, pyhook,  pillow,
 
-tanDragonHides(5000)
+tanDragonHides(12000)
 
 
 #521xhz4FRkTc
