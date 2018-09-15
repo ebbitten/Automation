@@ -7,6 +7,8 @@ import imutils
 import pyautogui
 import numpy as np
 import time
+from fuzzywuzzy import fuzz
+import winsound
 
 tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
 
@@ -31,18 +33,38 @@ def ocr(image, preprocess=None):
     cv2.imwrite("gray_screenshot.png", gray)
     text = pytesseract.image_to_string(Image.open("gray_screenshot.png"))
     print(text)
-    cv2.imshow("Image", image)
+    # cv2.imshow("Image", image)
     cv2.imshow("Output", gray)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
+    return text
+
+def screen_and_compare(text, threshold=80):
+    image = takescreenshot()
+    ocr_text = ocr(image)
+    ratio = fuzz.partial_ratio(text, ocr_text)
+    print(ratio)
+    if ratio > threshold:
+        return True
+    else:
+        return False
 
 
 def main():
-    print("Starting in 3")
-    time.sleep(3)
-    image = takescreenshot()
-    # cv2.imshow("Image", image)
-    # cv2.waitKey(0)
-    text = ocr(image)
+    phrases = ["Bank Grand Exchange Booth / 23 more options", "Withdraw-1 Green dragonhide / 7 more options", "Close",
+             "Cast Tan Leather / 1 more options", "Deposit-1 Green dragon leather / 6 more options"]
+    phrases = ["Deposit-1 Green dragon leather / 6 more options"]
+    for phrase in phrases:
+        print("Starting in 3")
+        time.sleep(5)
+        image = takescreenshot()
+        # cv2.imshow("Image", image)
+        # cv2.waitKey(0)
+        text = ocr(image)
+        print(fuzz.partial_ratio(phrase, text))
+        winsound.Beep(2500, 1000)
+    winsound.Beep(2000, 2000)
 
 
 main()
+
+
