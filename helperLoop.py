@@ -3,7 +3,18 @@ import argparse
 import pyautogui,time,winsound,random
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
-
+def humanMove(finalx,finaly,totalTime,steps):
+    tweens = [pyautogui.easeOutQuad,pyautogui.easeInQuad,pyautogui.easeInOutQuad]
+    startingPos=pyautogui.position()
+    for i in range(1,steps+1):
+        tweenChoice=random.choice(tweens)
+        x = startingPos[0]*(steps-i)/steps + finalx * (i)/steps
+        y = startingPos[1]*(steps-i)/steps + finaly * (i)/steps
+        if i<steps:
+            x+=random.randint(-20,20)
+            y+=random.randint(-20,20)
+        stepTime = totalTime/steps
+        pyautogui.moveTo(x,y,stepTime,tweenChoice,None,False)
 
 def meleeNMZ(coordsList,timeElapsed,startTime,consumedList,consumedTimer):
     time.sleep(10)
@@ -108,6 +119,29 @@ def randomBrowsing():
     y = random.randint(1,screenHeight)
     moveTime = random.randrange(15, 30, 1) / 10
     humanMove(x, y, moveTime, 4)
+
+def sellStuff(times):
+    #needs numkeys///osBuddy on with distance = 90
+    for t in range(times):
+        print('sold ','\n',t)
+        doClick(button='right',duration=(random.randint(20, 30)/100))
+        time.sleep(random.randint(20,30)/100)
+        pyautogui.press('num2', interval = random.randint(20,30)/100)
+        pyautogui.press('num5', interval=random.randint(20, 30) / 100)
+        pyautogui.press('num8', interval=random.randint(20, 30) / 100)
+        time.sleep(random.randint(20, 30) / 100)
+        if .9 < random.random():
+            time.sleep(random.randint(10,30)/10)
+        if .98 < random.random():
+            time.sleep(random.randint(8,15))
+
+
+
+
+def doAndShortSleep(func, length = random.randint(20,30)/100):
+    pass
+    #figure out how to return/curry/partial/whatever a function that has its original
+    # feature but also sleeps for a little
 
 def extraStuff():
     # screenWidth, screenHeight = pyautogui.size()

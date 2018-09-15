@@ -150,8 +150,13 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
             break
 
 
-def tanDragonHides(hides):
-    locations = [[677, 139], [1076, 67], [1828, 832], [1007, 519], [1751, 783]]
+def tanDragonHides(hides, computer="Y570"):
+    if computer == "Y570":
+        locations = [[677, 139], [1076, 67], [1828, 832], [1007, 519], [1751, 783]]
+    elif computer == "T470s":
+        locations = [[538, 187], [1134, 77], [1781, 723], [989, 506], [1668, 645]]
+    else:
+        raise ValueError
     print('initiating...')
     time.sleep(5)
     actionsList = (('easyMove(locations[0])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
@@ -170,6 +175,35 @@ def tanDragonHides(hides):
                 exec(action)
                 time.sleep(.21)
             randomSleep()
+
+def craft_dragon_hides(hides, computer="Y570"):
+    if computer == "Y570":
+        locations = [[677, 139], [1076, 67], [1828, 832], [1007, 519], [1751, 783]]
+    elif computer == "T470s":
+        locations = [[898, 512], [1136, 78], [1728, 594], [1667, 597], [989, 506], [1667, 648]]
+    else:
+        raise ValueError
+    print('initiating...')
+    time.sleep(5)
+    actionsList = (('easyMove(locations[0])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
+                   ('easyMove(locations[1])','easyClick()'),
+                   ('easyMove(locations[2])','time.sleep(1.2)','easyClick()'),
+                   ('easyMove(locations[3])','easyClick()','time.sleep(1.2)'),
+                   ('easyPress("1")','time.sleep(15)'),
+                   ('easyMove(locations[4])', 'time.sleep(1.2)', 'easyClick()', 'time.sleep(1.2)'),
+                   ('easyMove(locations[5])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")', 'easyPress("num5")','time.sleep(1)')
+               )
+    for i in range(int(hides//25)):
+        actionsListc = actionsList[:]
+        print('on hides number: ' + str(i * 25))
+        for actions in actionsListc:
+            for action in actions:
+                print(str(action))
+
+                exec(action)
+                time.sleep(.21)
+            randomSleep()
+
 
 def clickWait(num):
     for i in range(num):
@@ -197,10 +231,13 @@ def easyClick():
 
 #print("initializing")
 #runNMZAbsorp("Y570",0, 0, 320, 190 , 10, 14)
-#findCoordinates(1,0,0)
+findCoordinates(2,0,0)
 # requires pyauotgui, pyhook,  pillow,
 
-tanDragonHides(12000)
 
+# findCoordinates(1,0,0)
+# tanDragonHides(10000, computer="T470s")
+
+# craft_dragon_hides(12000, computer="T470s")
 
 #521xhz4FRkTc
