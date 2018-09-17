@@ -4,8 +4,12 @@ import pyautogui, time, winsound
 import importlib
 import random
 import helperLoop
+import ocr
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = True
+
+MAX_FAILED_MOVE_ATTEMPTS = 15
+FAILED_MOVE_ATTEMPTS = 0
 
 
 def getCoord():
@@ -13,7 +17,7 @@ def getCoord():
     prevX = 0
     prevY = 0
     while counter < 5:
-        time.sleep(.5)
+        printsleep(.5)
         curposition = pyautogui.position()
         curX = curposition[0]
         curY = curposition[1]
@@ -34,7 +38,7 @@ def findCoordinates(hw, overLoads, prayerpots):
     hwCoords = []
     overCoords = []
     ppCords = []
-    time.sleep(5)
+    printsleep(5)
     for i in range(hw):
         newCoord = getCoord()
         hwCoords.append(newCoord)
@@ -138,7 +142,7 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
     #Make the list for how many we'll consider consumed
     consumedList = [oversConsumed, absorpConsumed]
     print("starting in 5")
-    time.sleep(5)
+    printsleep(5)
     while timeElapsed < 20000:
         importlib.reload(helperLoop)
         curTime = time.time()
@@ -157,13 +161,15 @@ def tanDragonHides(hides, computer="Y570"):
         locations = [[538, 187], [1134, 77], [1781, 723], [989, 506], [1668, 645]]
     else:
         raise ValueError
+    phrases = [ "Withdraw-1 Green dragonhide", "Close",
+             "Cast Tan Leather", "Bank Grand Exchange Booth", "Deposit-1 Green dragon leather" ]
     print('initiating...')
-    time.sleep(5)
-    actionsList = (('easyMove(locations[0])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
-                   ('easyMove(locations[1])','easyClick()'),
-                   ('easyMove(locations[2])','time.sleep(3)','clickWait(6)'),
-                   ('easyMove(locations[3])','easyClick()','time.sleep(1.2)'),
-                   ('easyMove(locations[4])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)')
+    printsleep(5)
+    actionsList = (('easyMove(locations[0], phrases[0])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','printsleep(1)'),
+                   ('easyMove(locations[1], phrases[1])','easyClick()'),
+                   ('easyMove(locations[2], phrases[2])','printsleep(3)','clickWait(6)'),
+                   ('easyMove(locations[3], phrases[3])','easyClick()','printsleep(1.2)'),
+                   ('easyMove(locations[4])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','printsleep(1)')
                )
     for i in range(int(hides//25)):
         actionsListc = actionsList[:]
@@ -173,7 +179,7 @@ def tanDragonHides(hides, computer="Y570"):
                 print(str(action))
 
                 exec(action)
-                time.sleep(.21)
+                printsleep(.21)
             randomSleep()
 
 def craft_dragon_hides(hides, computer="Y570"):
@@ -184,14 +190,14 @@ def craft_dragon_hides(hides, computer="Y570"):
     else:
         raise ValueError
     print('initiating...')
-    time.sleep(5)
-    actionsList = (('easyMove(locations[0])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','time.sleep(1)'),
+    printsleep(5)
+    actionsList = (('easyMove(locations[0])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','printsleep(1)'),
                    ('easyMove(locations[1])','easyClick()'),
-                   ('easyMove(locations[2])','time.sleep(1.2)','easyClick()'),
-                   ('easyMove(locations[3])','easyClick()','time.sleep(1.2)'),
-                   ('easyPress("1")','time.sleep(15)'),
-                   ('easyMove(locations[4])', 'time.sleep(1.2)', 'easyClick()', 'time.sleep(1.2)'),
-                   ('easyMove(locations[5])','easyPress("num5")','time.sleep(.2)','easyPress("num2")','easyPress("num2")', 'easyPress("num5")','time.sleep(1)')
+                   ('easyMove(locations[2])','printsleep(1.2)','easyClick()'),
+                   ('easyMove(locations[3])','easyClick()','printsleep(1.2)'),
+                   ('easyPress("1")','printsleep(15)'),
+                   ('easyMove(locations[4])', 'printsleep(1.2)', 'easyClick()', 'printsleep(1.2)'),
+                   ('easyMove(locations[5])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")', 'easyPress("num5")','printsleep(1)')
                )
     for i in range(int(hides//25)):
         actionsListc = actionsList[:]
@@ -201,27 +207,72 @@ def craft_dragon_hides(hides, computer="Y570"):
                 print(str(action))
 
                 exec(action)
-                time.sleep(.21)
+                printsleep(.21)
             randomSleep()
 
 
 def clickWait(num):
     for i in range(num):
         easyClick()
-        time.sleep(abs(random.normalvariate(1.4, .1)))
+        printsleep(abs(random.normalvariate(1.4, .1)))
         randomSleep()
 
 def randomSleep():
     if random.random() < .01:
-        time.sleep(abs(random.normalvariate(40,5)))
+        printsleep(abs(random.normalvariate(40,5)))
     if random.random() < .05:
-        time.sleep(abs(random.normalvariate(7,3)))
+        printsleep(abs(random.normalvariate(7,3)))
     if random.random() < .002:
         print('browsing')
         helperLoop.randomBrowsing()
 
-def easyMove(location):
-    helperLoop.humanMove(location[0],location[1],1.2,8)
+
+def easyMove(location, text="", threshold=80, max_attempts=3):
+    humanMove(location[0], location[1], 1.2, 8)
+    time.sleep(.2)
+    global FAILED_MOVE_ATTEMPTS
+    global MAX_FAILED_MOVE_ATTEMPTS
+    if text:
+        attempts = 0
+        while attempts < max_attempts:
+            if ocr.screen_and_compare(text, threshold):
+                return True
+            else:
+                humanMove(location[0], location[1], .3, 1, jiggle=True)
+                printsleep(.5)
+                attempts += 1
+        if attempts == max_attempts:
+            FAILED_MOVE_ATTEMPTS += 1
+            print(FAILED_MOVE_ATTEMPTS)
+        if FAILED_MOVE_ATTEMPTS >= MAX_FAILED_MOVE_ATTEMPTS:
+            raise FailedMoveAttempt('too many failed movements')
+        
+
+class FailedMoveAttempt(Exception):
+    "Raised when there's too many failed movement attempts"
+    pass
+
+def humanMove(finalx, finaly, totalTime, steps, jiggle=False):
+    tweens = [pyautogui.easeOutQuad, pyautogui.easeInQuad, pyautogui.easeInOutQuad]
+    startingPos = pyautogui.position()
+    # If we're already on the spot just go ahead and get ready to click
+    if not jiggle:
+        if ((abs(finalx - startingPos[0]) + abs(finaly - startingPos[1])) ** .5) < 5:
+            return
+    # otherwise move there over a series of steps
+    for i in range(1, steps + 1):
+        tweenChoice = random.choice(tweens)
+        x = startingPos[0] * (steps - i) / steps + finalx * (i) / steps
+        y = startingPos[1] * (steps - i) / steps + finaly * (i) / steps
+        if i < steps:
+            x += random.normalvariate(0, 5)
+            y += random.normalvariate(0, 5)
+        elif i == steps:
+            x += random.normalvariate(0, 3)
+            y += random.normalvariate(0, 3)
+        stepTime = totalTime / steps
+        pyautogui.moveTo(x, y, stepTime, tweenChoice, None, False)
+
 
 def easyPress(key):
     pyautogui.press(key, interval = (random.normalvariate(25,5)/100))
@@ -229,14 +280,19 @@ def easyPress(key):
 def easyClick():
     helperLoop.doClick(clicks=1, duration=(random.normalvariate(25, 3) / 100))
 
+def printsleep(time_to_sleep):
+    if time_to_sleep > 2:
+        print("time to sleep: ", time_to_sleep)
+    time.sleep(time_to_sleep)
+
 #print("initializing")
 #runNMZAbsorp("Y570",0, 0, 320, 190 , 10, 14)
-findCoordinates(2,0,0)
+# findCoordinates(2,0,0)
 # requires pyauotgui, pyhook,  pillow,
 
 
 # findCoordinates(1,0,0)
-# tanDragonHides(10000, computer="T470s")
+tanDragonHides(10000, computer="Y570")
 
 # craft_dragon_hides(12000, computer="T470s")
 
