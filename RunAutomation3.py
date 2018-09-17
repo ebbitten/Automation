@@ -156,7 +156,7 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
 
 def tanDragonHides(hides, computer="Y570"):
     if computer == "Y570":
-        locations = [[677, 139], [1076, 67], [1828, 832], [1007, 519], [1751, 783]]
+        locations = [[677, 139], [1076, 67], [1828, 832], [980, 519], [1751, 783]]
     elif computer == "T470s":
         locations = [[538, 187], [1134, 77], [1781, 723], [989, 506], [1668, 645]]
     else:
@@ -260,16 +260,20 @@ def humanMove(finalx, finaly, totalTime, steps, jiggle=False):
         if ((abs(finalx - startingPos[0]) + abs(finaly - startingPos[1])) ** .5) < 5:
             return
     # otherwise move there over a series of steps
+    step_variance = 5
+    last_variance = 3
+    if jiggle:
+        last_variance = 5
     for i in range(1, steps + 1):
         tweenChoice = random.choice(tweens)
         x = startingPos[0] * (steps - i) / steps + finalx * (i) / steps
         y = startingPos[1] * (steps - i) / steps + finaly * (i) / steps
         if i < steps:
-            x += random.normalvariate(0, 5)
-            y += random.normalvariate(0, 5)
+            x += random.normalvariate(0, step_variance)
+            y += random.normalvariate(0, step_variance)
         elif i == steps:
-            x += random.normalvariate(0, 3)
-            y += random.normalvariate(0, 3)
+            x += random.normalvariate(0, last_variance)
+            y += random.normalvariate(0, last_variance)
         stepTime = totalTime / steps
         pyautogui.moveTo(x, y, stepTime, tweenChoice, None, False)
 
