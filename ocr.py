@@ -51,15 +51,15 @@ def screen_and_compare(text, threshold=80):
         return True
     else:
         filename = str(time.strftime("%d_%H_%M_%S", time.localtime())) + ".png"
-        mouse_pos = pyautogui.displayMousePosition()
+        mouse_pos = pyautogui.position()
         print("Saving ", filename, " as a failure", "\n", "mouse location at ", mouse_pos)
         cv2.imwrite(filename, image)
         full_screen = cv2.cvtColor(np.array(pyautogui.screenshot()), cv2.COLOR_RGB2BGR)
         cv2.imwrite("full_" + filename, full_screen)
         rectangle_coords = [mouse_pos[0]-3, mouse_pos[1]-3, mouse_pos[0]+3, mouse_pos[1]+3]
         rectangle_coords = [max(x, 0) for x in rectangle_coords]
-        boxed = cv2.rectangle(full_screen, (rectangle_coords[0], rectangle_coords[1]), (rectangle_coords[2], rectangle_coords[3],
-                                                                                (0, 255, 0), 2))
+        boxed = cv2.rectangle(full_screen, (rectangle_coords[0], rectangle_coords[1]), (rectangle_coords[2], rectangle_coords[3]),
+                                                                                (0, 255, 0), 2)
         cv2.imwrite("boxed_"+filename, boxed)
         return False
 
@@ -89,4 +89,3 @@ def test_failed():
         text = ocr(cv2.imread(image_file), ["thresh"])
 
 
-test_failed()

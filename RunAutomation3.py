@@ -155,14 +155,15 @@ def runNMZAbsorp(laptopType = "Y570", oversConsumed=0, absorpConsumed=0, overCon
 
 
 def tanDragonHides(hides, computer="Y570"):
+    #TODO fiure out why the 5 mousekey/right clicking doesn't always work
     if computer == "Y570":
         locations = [[677, 139], [1076, 67], [1828, 832], [980, 519], [1751, 783]]
     elif computer == "T470s":
         locations = [[538, 187], [1134, 77], [1781, 723], [989, 506], [1668, 645]]
     else:
         raise ValueError
-    phrases = [ "Withdraw-1 Green dragonhide", "Close",
-             "Cast Tan Leather", "Bank Grand Exchange Booth", "Deposit-1 Green dragon leather" ]
+    phrases = [ "Withdraw-1 Blue dragonhide", "Close",
+             "Cast Tan Leather", "Bank Grand Exchange Booth", "Deposit-1 Blue dragon leather" ]
     print('initiating...')
     printsleep(5)
     actionsList = (('easyMove(locations[0], phrases[0])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','printsleep(1)'),
@@ -224,7 +225,10 @@ def randomSleep():
         printsleep(abs(random.normalvariate(7,3)))
     if random.random() < .002:
         print('browsing')
-        helperLoop.randomBrowsing()
+        # helperLoop.randomBrowsing()
+        print('browsing not currently implemented')
+        #TODO re-implement but make sure it ends up back in the same spot
+
 
 
 def easyMove(location, text="", threshold=80, max_attempts=3):
@@ -260,6 +264,7 @@ def humanMove(finalx, finaly, totalTime, steps, jiggle=False):
         if ((abs(finalx - startingPos[0]) + abs(finaly - startingPos[1])) ** .5) < 5:
             return
     # otherwise move there over a series of steps
+    #TODO make this look a lot more "human"
     step_variance = 5
     last_variance = 3
     if jiggle:
@@ -296,7 +301,7 @@ def printsleep(time_to_sleep):
 
 
 # findCoordinates(1,0,0)
-tanDragonHides(10000, computer="Y570")
+tanDragonHides(5000, computer="Y570")
 
 # craft_dragon_hides(12000, computer="T470s")
 
