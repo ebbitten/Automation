@@ -166,11 +166,11 @@ def tanDragonHides(hides, computer="Y570"):
              "Cast Tan Leather", "Bank Grand Exchange Booth", "Deposit-1 Blue dragon leather" ]
     print('initiating...')
     printsleep(5)
-    actionsList = (('easyMove(locations[0], phrases[0])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','printsleep(1)'),
+    actionsList = (('easyMove(locations[0], phrases[0])','easy_right_click()','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyClick()','printsleep(1)'),
                    ('easyMove(locations[1], phrases[1])','easyClick()'),
                    ('easyMove(locations[2], phrases[2])','printsleep(3)','clickWait(6)'),
                    ('easyMove(locations[3], phrases[3])','easyClick()','printsleep(1.2)'),
-                   ('easyMove(locations[4])','easyPress("num5")','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyPress("num5")','printsleep(1)')
+                   ('easyMove(locations[4])','easy_right_click()','printsleep(.2)','easyPress("num2")','easyPress("num2")','easyClick()','printsleep(1)')
                )
     for i in range(int(hides//25)):
         actionsListc = actionsList[:]
@@ -291,7 +291,8 @@ def easyClick():
     doClick(clicks=1, duration=(random.normalvariate(25, 3) / 100))
 
 def easy_right_click():
-    doClick(clicks=1, duration=(random.normalvariate(35, 3) / 100))
+    doClick(clicks=1, button='right', duration=(random.normalvariate(35, 3) / 100))
+
 
 def doClick(clicks=1, interval=0.0, button='left', duration=0.0):
     try:
