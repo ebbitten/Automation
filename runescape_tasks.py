@@ -1,7 +1,7 @@
 # requires pyauotgui, pyhook,  pillow,
 import pyautogui, time
 import importlib
-from screen_control_bot import random_sleep, easy_move, easy_press, easy_click, easy_right_click, print_sleep
+import screen_control_bot
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = True
@@ -173,6 +173,7 @@ def craft_dragon_hides(hides, computer="Y570"):
 
 
 def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
+    b = screen_control_bot.ScreenBot()
     if computer == "Y570":
         in_game_locations = [[677, 139], [1076, 67], [980, 519], [1751, 783]]
         inventory_locations = [[1752, 751], [1794, 751], [1837, 751], [1878, 748], [1752, 787], [1797, 785], [1837, 785],
@@ -185,41 +186,46 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         raise ValueError
     in_game_phrases = ["Withdraw-1 Grimy " + str(herb_type) +" / 8 more options", "Close", "Bank Grand Exchange Booth", "Deposit-1 " + str(herb_type) + " / 8 more options"]
     inventory_phrases = ["Clean Grimy " + str(herb_type) +" / 3 more options"]
+    already_selected_herb_error_text = "Use " + str(herb_type) + " -> Grimy " + str(herb_type)
     print('initiating...')
-    print_sleep(5)
+    b.print_sleep(5)
     for i in range(int(num_herbs//28)):
         print('on hides number: ' + str(i * 28))
         #withdraw
-        easy_move(in_game_locations[0], in_game_phrases[0])
-        easy_right_click()
-        print_sleep(.2)
-        easy_press("num2")
-        easy_press("num2")
-        easy_click()
-        #close screen
-        print_sleep(1)
-        easy_move(in_game_locations[1], in_game_phrases[1])
-        easy_click()
+        b.easy_move(in_game_locations[0], in_game_phrases[0])
+        b.easy_right_click()
+        b.print_sleep(.2)
+        b.easy_press("num2")
+        b.easy_press("num2")
+        b.easy_click()
+        b.#close screen
+        b.print_sleep(1)
+        b.easy_move(in_game_locations[1], in_game_phrases[1])
+        b.easy_click()
         #clean herbs!!
         for inven_loc in inventory_locations:
-            print_sleep(.5)
-            easy_move(inven_loc, inventory_phrases[0])
-            print_sleep(.21)
-            easy_click()
-            print_sleep(.21)
-        random_sleep()
+            b.print_sleep(.5)
+            ocr_result = b.move_and_decide_text(inven_loc, [inventory_phrases[0],already_selected_herb_error_text], threshold=60)
+            if ocr_result[1] == inventory_phrases[0]:
+                b.print_sleep(.21)
+                b.easy_click()
+                b.print_sleep(.21)
+            elif ocr_result[1] == already_selected_herb_error_text:
+                b.click_wait(2)
+
+        b.random_sleep()
         #open bank
-        easy_move(in_game_locations[2], in_game_phrases[2])
-        print_sleep(1.2)
-        easy_click()
+        b.easy_move(in_game_locations[2], in_game_phrases[2])
+        b.print_sleep(1.2)
+        b.easy_click()
         #deposit
-        easy_move(in_game_locations[3], in_game_phrases[3])
-        easy_right_click()
-        print_sleep(.2)
-        easy_press("num2")
-        easy_press("num2")
-        easy_click()
-        print_sleep(1)
+        b.easy_move(in_game_locations[3], in_game_phrases[3])
+        b.easy_right_click()
+        b.print_sleep(.2)
+        b.easy_press("num2")
+        b.easy_press("num2")
+        b.easy_click()
+        b.print_sleep(1)
 
 
 #print("initializing")

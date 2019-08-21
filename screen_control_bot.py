@@ -6,13 +6,15 @@ import ocr
 
 
 class ScreenBot():
-    def __init__(self):
+    def __init__(self, max_cur_failed_attempts=5, max_total_failed_attempts=15):
         self.cur_pos = []
         self.prev_pos = []
         self.cur_fails = 0
         self.total_fails = 0
         self.time_active = 0
         self.time_sleeping = 0
+        self.max_cur_failed_attempts = max_cur_failed_attempts
+        self.max_total_failed_attempts = max_total_failed_attempts
 
     def click_wait(self, num):
         for i in range(num):
@@ -51,10 +53,29 @@ class ScreenBot():
             if FAILED_MOVE_ATTEMPTS >= MAX_FAILED_MOVE_ATTEMPTS:
                 raise FailedMoveAttempt('too many failed movements')
 
+    def move_and_decide_text(self, location, text_list, threshold=80, max_attempts=3):
+        self.human_move(location[0], location[1], 1.2, 8)
+        time.sleep(.2)
+        self.cur_fails = 0
+        while self.cur_fails < self.max_cur_failed_attempts:
+            top_text_result = ocr.screen_compare_multiple_texts(text_list, threshold)
+            if top_text_result:
+                return top_text_result
+            else:
+                self.human_move(location[0], location[1], .3, 1, jiggle=True)
+                self.print_sleep(.5)
+                self.cur_fails += 1
+                self.total_fails += 1
+        if self.total_fails > self.max_total_failed_attempts:
+            raise FailedMoveAttempt("Too many failed movements")
+
+
+
 
 
 
     def human_move(self, finalx, finaly, totalTime, steps, jiggle=False):
+        self.prev_pos = self.cur_pos
         tweens = [pyautogui.easeOutQuad, pyautogui.easeInQuad, pyautogui.easeInOutQuad]
         starting_pos = pyautogui.position()
         # If we're already on the spot just go ahead and get ready to click
@@ -79,6 +100,7 @@ class ScreenBot():
                 y += random.normalvariate(0, last_variance)
             stepTime = totalTime / steps
             pyautogui.moveTo(x, y, stepTime, tween_choice, None, False)
+        self.cur_pos = [finalx, finaly]
 
     def easy_press(self, key):
         pyautogui.press(key, interval=(random.normalvariate(25, 5) / 100))
