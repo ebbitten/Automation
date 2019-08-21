@@ -16,13 +16,13 @@ tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
 
 TEXTBOXY580_E = (0, 31, 300, 25)
 
+
 def takescreenshot():
     image = pyautogui.screenshot(region=TEXTBOXY580_E)
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
     cv2.imwrite("screenshot.png", image)
     image = cv2.imread("screenshot.png")
     return image
-
 
 
 def ocr(image, preprocess=["thresh"]):
