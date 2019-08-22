@@ -3,8 +3,8 @@ import time
 import winsound
 import pyautogui
 import ocr
-
-
+FAILED_MOVE_ATTEMPTS = 0
+MAX_FAILED_MOVE_ATTEMPTS = 0
 class ScreenBot():
     def __init__(self, max_cur_failed_attempts=5, max_total_failed_attempts=15):
         self.cur_pos = []

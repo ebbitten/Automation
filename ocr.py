@@ -63,7 +63,7 @@ def screen_compare_multiple_texts(text_list, threshold=60, take_failed_screensho
     if max(ratio_list) < threshold:
         return False
     else:
-        return sorted(zip(range(len(ratio_list)), text_list, ratio_list), key=itemgetter(2), reverse=0)[0]
+        return sorted(zip(range(len(ratio_list)), text_list, ratio_list), key=itemgetter(2), reverse=True)[0]
 
 def take_failed_screenshot(image):
     filename = str(time.strftime("%d_%H_%M_%S", time.localtime())) + ".png"

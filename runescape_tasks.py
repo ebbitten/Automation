@@ -206,14 +206,17 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         for inven_loc in inventory_locations:
             b.print_sleep(.5)
             ocr_result = b.move_and_decide_text(inven_loc, [inventory_phrases[0],already_selected_herb_error_text], threshold=60)
+            print("OCR result is ", ocr_result)
             if not ocr_result:
                 pass
             if ocr_result[1] == inventory_phrases[0]:
                 b.print_sleep(.21)
                 b.easy_click()
                 b.print_sleep(.21)
+                print("cleaning")
             elif ocr_result[1] == already_selected_herb_error_text:
                 b.click_wait(2)
+                print("accidently selected cadantine, double clicking")
 
         b.random_sleep()
         #open bank
