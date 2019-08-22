@@ -370,10 +370,10 @@ def printsleep(time_to_sleep):
 # requires pyauotgui, pyhook,  pillow,
 
 #findCoordinates(5,0,0)
-#tanDragonHides(15000, computer="Y570")
+tanDragonHides(15000, computer="Y570")
 
 #craft_dragon_hides(20000, computer="Y570")
-clean_herbs(10000)
+#clean_herbs(10000)
 
 
 #521xhz4FRkTc
