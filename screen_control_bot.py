@@ -173,3 +173,4 @@ class ScreenBot():
 class FailedMoveAttempt(Exception):
     "Raised when there's too many failed movement attempts"
     pass
+
