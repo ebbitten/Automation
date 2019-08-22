@@ -198,7 +198,7 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         b.easy_press("num2")
         b.easy_press("num2")
         b.easy_click()
-        b.#close screen
+        #b.close_screen
         b.print_sleep(1)
         b.easy_move(in_game_locations[1], in_game_phrases[1])
         b.easy_click()
