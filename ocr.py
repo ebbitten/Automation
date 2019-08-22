@@ -60,7 +60,7 @@ def screen_compare_multiple_texts(text_list, threshold=60, take_failed_screensho
     image = takescreenshot()
     ocr_text, image = ocr(image)
     ratio_list = [fuzz.partial_ratio(text, ocr_text) for text in text_list]
-    if max(ratio_list) >= threshold:
+    if max(ratio_list) < threshold:
         return False
     else:
         return sorted(zip(range(len(ratio_list)), text_list, ratio_list), key=itemgetter(2), reverse=0)[0]
