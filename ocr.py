@@ -12,7 +12,9 @@ import winsound
 import math
 
 
-tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
+#tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
+#tesseract_cmd = 'C:\\Users\\Adam\\Downloads\\jTessBoxEditor-2.0.1\\jTessBoxEditor\\tesseract-ocrtesseract\\tesseract'
+tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
 
 TEXTBOXY580_E = (0, 31, 300, 25)
 

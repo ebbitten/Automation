@@ -6,7 +6,7 @@ import random
 import helperLoop
 import ocr
 pyautogui.PAUSE = 0
-pyautogui.FAILSAFE = True
+pyautogui.FAILSAFE = False
 
 MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
