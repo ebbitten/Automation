@@ -41,6 +41,7 @@ class ScreenBot():
         if text:
             attempts = 0
             while attempts < max_attempts:
+                time.sleep(.3)
                 if ocr.screen_and_compare(text, threshold, take_failed_screenshot):
                     return True
                 else:

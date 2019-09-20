@@ -175,7 +175,7 @@ def craft_dragon_hides(hides, computer="Y570"):
 def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
     b = screen_control_bot.ScreenBot()
     if computer == "Y570":
-        in_game_locations = [[677, 139], [1076, 67], [980, 519], [1031, 825]]
+        in_game_locations = [[677, 139], [1076, 67], [961, 512], [1031, 825]]
         inventory_locations = [[1752, 751], [1794, 751], [1837, 751], [1878, 748], [1752, 787], [1797, 785], [1837, 785],
                      [1884, 787], [1755, 820], [1797, 820], [1834, 823], [1879, 824], [1757, 856], [1796, 857],
                      [1838, 856], [1883, 859], [1758, 892], [1797, 896], [1838, 892], [1878, 896], [1754, 929],
@@ -184,7 +184,7 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         locations = [[898, 512], [1136, 78], [1728, 594], [1667, 597], [989, 506], [1667, 648]]
     else:
         raise ValueError
-    in_game_phrases = ["Withdraw-1 Grimy " + str(herb_type) +" / 8 more options", "Close", "Bank Grand Exchange Booth", "Deposit invenvtory"]
+    in_game_phrases = ["Withdraw-1 Grimy " + str(herb_type) +" / 8 more options", "Close", "Bank Bank Booth / 3 more options", "Deposit-1 " + str(herb_type)]
     inventory_phrases = ["Clean Grimy " + str(herb_type) +" / 3 more options"]
     already_selected_herb_error_text = "Use " + str(herb_type) + " -> Grimy " + str(herb_type)
     print('initiating...')
@@ -193,6 +193,7 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         print('on hides number: ' + str(i * 28))
         #withdraw
         b.easy_move(in_game_locations[0], in_game_phrases[0])
+        time.sleep(.3)
         b.easy_right_click()
         b.print_sleep(.2)
         b.easy_press("num2")
@@ -201,6 +202,7 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         #b.close_screen
         b.print_sleep(1)
         b.easy_move(in_game_locations[1], in_game_phrases[1])
+        time.sleep(.3)
         b.easy_click()
         #clean herbs!!
         for inven_loc in inventory_locations:
@@ -224,10 +226,21 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         b.print_sleep(1.2)
         b.easy_click()
         #deposit
-        b.easy_move(in_game_locations[3], in_game_phrases[3])
-        b.print_sleep(.2)
+        b.easy_move(inventory_locations[0])
+        b.easy_right_click()
+        b.print_sleep(0.2)
+        b.easy_press("num2")
+        b.easy_press("num2")
         b.easy_click()
         b.print_sleep(1)
+        #'easyMove(locations[4])', 'easy_right_click()', 'printsleep(.2)', 'easyPress("num2")', 'easyPress("num2")', 'easyClick()', 'printsleep(1)'
+
+
+        #Deposit inventory was blanking a lot
+        # b.easy_move(in_game_locations[3], in_game_phrases[3])
+        # b.print_sleep(.2)
+        # b.easy_click()
+        # b.print_sleep(1)
 
 
 #print("initializing")
@@ -236,13 +249,12 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
 # requires pyauotgui, pyhook,  pillow,
 
 #findCoordinates(5,0,0)
-tanDragonHides(15000, computer="Y570")
+#tanDragonHides(15000, computer="Y570")s
 
 #craft_dragon_hides(20000, computer="Y570")
-#clean_herbs(10000)
+clean_herbs(10000)
 
 
 #521xhz4FRkTc
-
-#findCoordinates(28,0,0)
+#screen_control_bot.ScreenBot().find_coordinates(1,0,0)
 

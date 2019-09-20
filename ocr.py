@@ -13,8 +13,8 @@ import math
 from operator import itemgetter
 
 
-tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
-
+#tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
+tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
 TEXTBOXY580_E = (0, 31, 300, 25)
 
 
