@@ -173,6 +173,51 @@ class ScreenBot():
         print(pp_cords)
         filePath = input("please input a filepath to save the coordinates")
 
+    def randomBrowsing(self):
+        screenWidth, screenHeight = pyautogui.size()
+        x = random.randint(1, screenWidth)
+        y = random.randint(1, screenHeight)
+        moveTime = random.randrange(15, 30, 1) / 10
+        self.human_move(x, y, moveTime, 4)
+
+    def flick_pray(self, rapidHeal):
+        randInterval = random.randint(20, 30) / 100
+        pyautogui.press('f5', interval=randInterval)
+        time.sleep(random.randint(25, 35) / 100)
+        randInterval = random.normalvariate(25, 3) / 10
+        self.human_move(rapidHeal[0], rapidHeal[1], randInterval, 2)
+        self.do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+        time.sleep(random.randint(150, 200) / 100)
+        self.do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+        time.sleep(random.normalvariate(175, 15) / 100)
+        randInterval = random.normalvariate(25, 3) / 100
+        pyautogui.press('esc', interval=randInterval)
+
+    def check_and_consume(self, consumed_type, consumed_timer, coords_list, consumed_list, time_elapsed):
+        if time_elapsed - consumed_timer[consumed_type] * consumed_list[consumed_type] > consumed_timer[consumed_type]:
+            typename = ["Overload", "Prayer Potion"]
+            print(("Drinking " + str(typename[consumed_type]) + "\n") * 3)
+            time.sleep(2)
+            # move to our potion
+            x = coords_list[consumed_type][0][0] + random.normalvariate(0, 2)
+            y = coords_list[consumed_type][0][1] + random.normalvariate(0, 2)
+            moveTime = random.randrange(20, 40, 1) / 10
+            self.human_move(x, y, moveTime, 3)
+            # click
+            self.do_click(duration=random.normalvariate(20, 3) / 100)
+            time.sleep(.5)
+            # Move to a random location occasionly
+            if random.randint(0, 20) > 19:
+                self.random_browsing()
+            # update our consumption
+            consumed_list[consumed_type] += 1
+            if consumed_list[consumed_type] % 4 == 0:
+                coords_list[consumed_type].pop(0)
+            if typename[consumed_type] == "Overload" and len(coords_list[consumed_type]) == 1 and consumed_list[
+                consumed_type] % 4 == 3:
+                coords_list[consumed_type].pop(0)
+                consumed_list[consumed_type] += 1
+
 
 
 
@@ -182,48 +227,3 @@ class FailedMoveAttempt(Exception):
     pass
 
 
-def randomBrowsing():
-    screenWidth, screenHeight = pyautogui.size()
-    x = random.randint(1,screenWidth)
-    y = random.randint(1,screenHeight)
-    moveTime = random.randrange(15, 30, 1) / 10
-    human_move(x, y, moveTime, 4)
-
-
-def flick_pray(rapidHeal):
-    randInterval = random.randint(20,30)/100
-    pyautogui.press('f5', interval=randInterval)
-    time.sleep(random.randint(25, 35) / 100)
-    randInterval = random.normalvariate(25, 3) / 10
-    human_move(rapidHeal[0], rapidHeal[1], randInterval, 2)
-    doClick(clicks = 1, duration = (random.normalvariate(25, 3)/100))
-    time.sleep(random.randint(150, 200) / 100)
-    doClick(clicks=1, duration=(random.normalvariate(25, 3) / 100))
-    time.sleep(random.normalvariate(175,15)/100)
-    randInterval = random.normalvariate(25, 3) / 100
-    pyautogui.press('esc', interval=randInterval)
-
-
-def checkAndConsume(consumedType,consumedTimer,coordsList,consumedList,timeElapsed):
-    if timeElapsed - consumedTimer[consumedType] * consumedList[consumedType] > consumedTimer[consumedType]:
-        typename = ["Overload","Prayer Potion"]
-        print(("Drinking " + str(typename[consumedType])+"\n")*3)
-        time.sleep(2)
-        #move to our potion
-        x = coordsList[consumedType][0][0] +random.normalvariate(0,2)
-        y = coordsList[consumedType][0][1] +random.normalvariate(0,2)
-        moveTime = random.randrange(20,40,1)/10
-        human_move(x, y, moveTime, 3)
-        #click
-        doClick(duration=random.normalvariate(20,3)/100)
-        time.sleep(.5)
-        #Move to a random location occasionly
-        if random.randint(0,20) > 19:
-            randomBrowsing()
-        #update our consumption
-        consumedList[consumedType] += 1
-        if consumedList[consumedType] % 4 == 0:
-            coordsList[consumedType].pop(0)
-        if typename[consumedType]=="Overload" and len(coordsList[consumedType])==1 and consumedList[consumedType] % 4 == 3:
-            coordsList[consumedType].pop(0)
-            consumedList[consumedType] += 1
