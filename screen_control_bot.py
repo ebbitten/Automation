@@ -6,7 +6,7 @@ import ocr
 
 
 pyautogui.PAUSE = 0
-pyautogui.FAILSAFE = True
+pyautogui.FAILSAFE = False
 MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
@@ -116,7 +116,7 @@ class ScreenBot():
         step_variance = 5
         last_variance = 3
         if jiggle:
-            last_variance = 10
+            last_variance = 5
         for i in range(1, steps + 1):
             tween_choice = random.choice(tweens)
             x = starting_pos[0] * (steps - i) / steps + finalx * (i) / steps
@@ -141,6 +141,7 @@ class ScreenBot():
         self.do_click(clicks=1, button='right', duration=(random.normalvariate(35, 3) / 100))
 
     def _do_click(self, clicks=1, interval=0.0, button='left', duration=0.0):
+        print("click")
         try:
             pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
         except:
