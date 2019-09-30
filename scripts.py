@@ -203,7 +203,7 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         #withdraw
         B.easy_move(in_game_locations[0], in_game_phrases[0])
         time.sleep(.3)
-        B.easy_right_click().prin
+        B.easy_right_click()
         B.print_sleep(.2)
         B.easy_press("num2")
         B.easy_press("num2")

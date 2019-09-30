@@ -101,7 +101,7 @@ class ScreenBot():
                 self.is_moving = False
                 return top_text_result
             else:
-                self.retry_move()
+                self.retry_move(location[0], location[1])
 
     def _human_move(self, finalx, finaly, totalTime, steps, jiggle=False):
         self.prev_pos = self.cur_pos
@@ -135,10 +135,10 @@ class ScreenBot():
         pyautogui.press(key, interval=(random.normalvariate(25, 5) / 100))
 
     def easy_click(self):
-        self.do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+        self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
 
     def easy_right_click(self):
-        self.do_click(clicks=1, button='right', duration=(random.normalvariate(35, 3) / 100))
+        self._do_click(clicks=1, button='right', duration=(random.normalvariate(35, 3) / 100))
 
     def _do_click(self, clicks=1, interval=0.0, button='left', duration=0.0):
         print("click")
@@ -197,9 +197,9 @@ class ScreenBot():
         time.sleep(random.randint(25, 35) / 100)
         randInterval = random.normalvariate(25, 3) / 10
         self._human_move(rapidHeal[0], rapidHeal[1], randInterval, 2)
-        self.do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+        self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
         time.sleep(random.randint(150, 200) / 100)
-        self.do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+        self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
         time.sleep(random.normalvariate(175, 15) / 100)
         randInterval = random.normalvariate(25, 3) / 100
         pyautogui.press('esc', interval=randInterval)
@@ -215,7 +215,7 @@ class ScreenBot():
             moveTime = random.randrange(20, 40, 1) / 10
             self._human_move(x, y, moveTime, 3)
             # click
-            self.do_click(duration=random.normalvariate(20, 3) / 100)
+            self._do_click(duration=random.normalvariate(20, 3) / 100)
             time.sleep(.5)
             # Move to a random location occasionly
             if random.randint(0, 20) > 19:
