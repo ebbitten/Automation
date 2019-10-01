@@ -226,8 +226,8 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
                 B.print_sleep(.21)
                 print("cleaning")
             elif ocr_result[1] == already_selected_herb_error_text:
-                B.click_wait(2)
-                print("accidently selected cadantine, double clicking")
+                B.click_wait(1)
+                print("accidently selected cadantine, clicking")
 
         B.random_sleep()
         # open bank

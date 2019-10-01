@@ -14,7 +14,7 @@ MAX_FAILED_MOVE_ATTEMPTS = 0
 
 class ScreenBot():
     def __init__(self, max_cur_failed_attempts=3, max_total_failed_attempts=15, text_compare_threshold=70,
-                 take_failed_screen=True, take_success_screen=True):
+                 take_failed_screen=False, take_success_screen=False):
         self.cur_pos = []
         self.prev_pos = []
         self.cur_fails = 0
