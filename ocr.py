@@ -27,7 +27,6 @@ def takescreenshot():
     image = cv2.imread("screenshot.png")
     return image
 
-
 def ocr(image, preprocess=["thresh"]):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     if "blur" in preprocess:
@@ -53,6 +52,7 @@ def screen_and_compare(text, threshold=60, take_failed_screenshot=False):
     if ratio > threshold:
         return True
     else:
+        print("OCR text result of " + str(ocr_text) + "failed threshold for single text")
         if take_failed_screenshot:
             take_failed_screenshot(image)
         return False
@@ -63,6 +63,7 @@ def screen_compare_multiple_texts(text_list, threshold=60, take_failed_screensho
     ocr_text, image = ocr(image)
     ratio_list = [fuzz.partial_ratio(text, ocr_text) for text in text_list]
     if max(ratio_list) < threshold:
+        print("OCR text result of " + str(ocr_text) +"failed threshold for multiple text")
         return False
     else:
         return sorted(zip(range(len(ratio_list)), text_list, ratio_list), key=itemgetter(2), reverse=True)[0]

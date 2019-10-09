@@ -52,6 +52,7 @@ class ScreenBot():
             y = random.randint(1, screenHeight)
             move_time = random.randrange(15, 30, 1) / 10
             self._human_move(x, y, move_time, 4)
+            time.sleep(abs(random.normalvariate(1, .2)))
         self._human_move(final_x, final_y, move_time * 2, 4)
 
     def print_sleep(self, time_to_sleep):
@@ -63,7 +64,6 @@ class ScreenBot():
             self.random_sleep(50)
 
     def retry_move(self, location_0, location_1):
-        self.print_sleep(.2)
         self.cur_fails += 1
         self.total_fails += 1
         self.print_sleep(.5)
