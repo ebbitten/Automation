@@ -3,7 +3,7 @@ import time
 import winsound
 import pyautogui
 import ocr
-
+import windows_os
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
@@ -11,6 +11,21 @@ MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
+
+
+PASSWORD = 'ce9Haq9zs12'
+COORDS ={ 'Click Here To Play': [937, 491],
+          'Bank': [950, 499],
+          'bank_tab_1': [559, 116],
+          'Deposit inventory': [1042, 733]
+
+
+}
+BOXES = {
+'Welcome to Runescape': (800, 381, 252, 39)
+}
+
+
 
 class ScreenBot():
     def __init__(self, max_cur_failed_attempts=3, max_total_failed_attempts=15, text_compare_threshold=70,
@@ -134,6 +149,10 @@ class ScreenBot():
     def easy_press(self, key):
         pyautogui.press(key, interval=(random.normalvariate(25, 5) / 100))
 
+    def easy_presses(self, keys):
+        for key in keys:
+            self.easy_press(key)
+
     def easy_click(self):
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
 
@@ -251,10 +270,58 @@ class ScreenBot():
         print(over_coords)
         print(pp_cords)
 
+    def click_on_bank(self):
+        self.easy_move(COORDS['Bank'])
+        self.easy_click()
+        pass
+
+    def click_on_bank_tab(self, tab=1):
+        tab_coord = COORDS['bank_tab_'+str(tab)]
+        self.easy_move(tab_coord)
+        self.easy_click()
+
+    def click_deposit_inventory(self):
+        self.easy_move(COORDS['Deposit inventory'])
+        self.easy_click()
+
+    def login(self):
+        if not pyautogui.locateOnScreen(r'assets\Welcome to Runescape.png'):
+            print('Disconeccted, adding an extra enter click')
+            self.easy_press('enter')
+        self.easy_press('enter')
+        keys = [str(x) for x in PASSWORD]
+        self.easy_presses(keys)
+        self.easy_press('enter')
+        time.sleep(5)
+        self.easy_move(COORDS['Click Here To Play'])
+        self.easy_click()
+        time.sleep(5)
+        pyautogui.keyDown('down')
+        time.sleep(random.normalvariate(2.2, .2))
+        pyautogui.keyUp('down')
+
+    def open_and_login(self):
+        windows_os.main()
+        self.login()
+
+
+    def open_login_deposit(self):
+        self.open_and_login()
+        time.sleep(1)
+        self.click_on_bank()
+        time.sleep(1)
+        self.click_on_bank_tab(tab=1)
+        time.sleep(1)
+        self.click_deposit_inventory()
+
+
 
 
 class FailedMoveAttempt(Exception):
     "Raised when there's too many failed movement attempts"
     pass
 
-
+if __name__ == '__main__':
+    b = ScreenBot()
+    #b.find_coordinates(2,0,0)
+    b.open_login_deposit()

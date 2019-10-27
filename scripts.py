@@ -3,7 +3,7 @@ import pyautogui, time
 import importlib
 import screen_control_bot
 import random
-
+import screen_control_bot
 
 B = screen_control_bot.ScreenBot()
 
@@ -250,6 +250,23 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         # b.print_sleep(.2)
         # b.easy_click()
         # b.print_sleep(1)
+lambda x: x()
+
+def repeat_script(script):
+    while True:
+        try:
+            b = screen_control_bot.ScreenBot()
+            b.open_login_deposit()
+            script()
+        except screen_control_bot.FailedMoveAttempt:
+            print('Restarting')
+            time.sleep(random.normalvariate(4*3600, 1000))
+
+if __name__ == '__main__':
+
+    script_transformer = lambda x: x(10000, herb_type='Dwarf weed')
+    repeat_script(script_transformer(clean_herbs))
+    pass
 
 
 #print("initializing")
@@ -261,7 +278,7 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
 #tanDragonHides(15000, computer="Y570")s
 
 #craft_dragon_hides(20000, computer="Y570")
-clean_herbs(10000)
+#clean_herbs(10000)
 
 
 #521xhz4FRkTc

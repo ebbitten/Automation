@@ -12,16 +12,20 @@ import winsound
 import math
 from operator import itemgetter
 
-
-#tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
+#t470s
+#tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#tessdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata\\configs"'
 #tesseract_cmd = 'C:\\Users\\Adam\\Downloads\\jTessBoxEditor-2.0.1\\jTessBoxEditor\\tesseract-ocrtesseract\\tesseract'
-tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
+
+#y580
+#tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
 
 TEXTBOXY580_E = (0, 31, 300, 25)
 
 
-def takescreenshot():
-    image = pyautogui.screenshot(region=TEXTBOXY580_E)
+def takescreenshot(region=TEXTBOXY580_E):
+    image = pyautogui.screenshot(region=region)
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
     cv2.imwrite("screenshot.png", image)
     image = cv2.imread("screenshot.png")
@@ -42,8 +46,8 @@ def ocr(image, preprocess=["thresh"]):
     # cv2.waitKey(0)
     return text, gray
 
-def screen_and_compare(text, threshold=60, take_failed_screenshot=False):
-    image = takescreenshot()
+def screen_and_compare(text, threshold=60, take_failed_screenshot=False, region=TEXTBOXY580_E):
+    image = takescreenshot(region)
     ocr_text, image = ocr(image)
     ratio = fuzz.partial_ratio(text, ocr_text)
     print("ratio is ", ratio)
