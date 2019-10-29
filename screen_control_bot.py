@@ -153,6 +153,11 @@ class ScreenBot():
         for key in keys:
             self.easy_press(key)
 
+    def easy_mk(self, numkey):
+        dist = 32
+        if numkey == 'num2':
+            pyautogui.moveRel(0,35,.5)
+
     def easy_click(self):
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
 
@@ -285,9 +290,9 @@ class ScreenBot():
         self.easy_click()
 
     def login(self):
-        if not pyautogui.locateOnScreen(r'assets\Welcome to Runescape.png'):
-            print('Disconeccted, adding an extra enter click')
+        if not ocr.imagesearch(r"assets\Welcome to Runescape.png", .7):
             self.easy_press('enter')
+            print('Disconeccted, adding an extra enter click')
         self.easy_press('enter')
         keys = [str(x) for x in PASSWORD]
         self.easy_presses(keys)
@@ -322,6 +327,11 @@ class FailedMoveAttempt(Exception):
     pass
 
 if __name__ == '__main__':
+    pass
     b = ScreenBot()
     #b.find_coordinates(2,0,0)
-    b.open_login_deposit()
+    #time.sleep(3)
+    #b.easy_mk('num2')
+    #b.easy_mk('num2')
+    #b.open_login_deposit()
+    #b.open_login_deposit()

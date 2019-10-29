@@ -112,15 +112,15 @@ def tan_dragon_hides(hides, computer="Y570"):
         B.easy_move(locations[0], phrases[0])
         B.easy_right_click()
         B.print_sleep(.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk('num2')
+        B.easy_mk('num2')
         B.easy_click()
         B.print_sleep(1)
         B.easy_move(locations[0], phrases[0])
         B.easy_right_click()
         B.print_sleep(.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk('num2')
+        B.easy_mk('num2')
         B.easy_click()
         B.print_sleep(1)
         B.easy_move(locations[1], phrases[1])
@@ -134,8 +134,8 @@ def tan_dragon_hides(hides, computer="Y570"):
         B.easy_move(locations[4])
         B.easy_right_click()
         B.print_sleep(.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk('num2')
+        B.easy_mk('num2')
         B.easy_click()
         B.print_sleep(1)
         B.random_sleep()
@@ -159,8 +159,8 @@ def craft_dragon_hides(hides, computer="Y570"):
         B.easy_move(locations[0], phrases[0])
         B.easy_right_click()
         B.print_sleep(.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk("num2")
+        B.easy_mk("num2")
         B.easy_click()
         B.print_sleep(1)
         B.easy_click()
@@ -176,8 +176,8 @@ def craft_dragon_hides(hides, computer="Y570"):
         B.easy_move(locations[5])
         B.easy_right_click()
         B.print_sleep(.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk("num2")
+        B.easy_mk("num2")
         B.easy_click()
         B.print_sleep(1)
 
@@ -205,8 +205,8 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         time.sleep(.3)
         B.easy_right_click()
         B.print_sleep(.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk("num2")
+        B.easy_mk("num2")
         B.easy_click()
         #B.close_screen
         B.print_sleep(1)
@@ -239,8 +239,8 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         B.easy_move(inventory_locations[0])
         B.easy_right_click()
         B.print_sleep(0.2)
-        B.easy_press("num2")
-        B.easy_press("num2")
+        B.easy_mk("num2")
+        B.easy_mk("num2")
         B.easy_click()
         B.print_sleep(1)
 
@@ -264,8 +264,10 @@ def repeat_script(script):
 
 if __name__ == '__main__':
 
-    script_transformer = lambda x: x(10000, herb_type='Dwarf weed')
-    repeat_script(script_transformer(clean_herbs))
+
+
+    print('transformed')
+    repeat_script(lambda: clean_herbs(10000, herb_type='Dwarf weed'))
     pass
 
 
