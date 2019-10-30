@@ -29,10 +29,10 @@ PASSWORD = 'ce9Haq9zs12'
 
 # Y580
 
-COORDS ={ 'Click Here To Play': [937, 491],
-          'Bank': [950, 499],
-          'bank_tab_1': [559, 116],
-          'Deposit inventory': [1042, 733]
+COORDS ={ 'Click Here To Play': [970, 368],
+          'Bank': [960, 521],
+          'bank_tab_1': [709, 127],
+          'Deposit inventory': [1032, 846]
 
 
 }
@@ -86,7 +86,7 @@ class ScreenBot():
         if time_to_sleep > 2:
             print("time to sleep: ", time_to_sleep)
         time.sleep(time_to_sleep)
-        if random.random() < .02:
+        if random.random() < .01:
             print("Sleeping for a bit longer!")
             self.random_sleep(50)
 
@@ -341,10 +341,11 @@ class FailedMoveAttempt(Exception):
 if __name__ == '__main__':
     pass
     b = ScreenBot()
-    b.record_screen_coords(5,0,0)
+    # b.record_screen_coords(5,0,0)
     #b.find_coordinates(2,0,0)
     #time.sleep(3)
     #b.easy_mk('num2')
     #b.easy_mk('num2')
     #b.open_login_deposit()
-    #b.open_login_deposit()
+    b.open_login_deposit()
+

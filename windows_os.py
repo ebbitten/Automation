@@ -8,8 +8,11 @@ import win32gui, win32con
 import re
 import pywinauto
 
-#PATH_TO_RUNELITE = r"C:\Users\adamh\AppData\Local\RuneLite\RuneLite.exe"
-PATH_TO_RUNELITE = r"C:\Users\Adam\AppData\Local\RuneLite\RuneLite.exe"
+PATH_TO_RUNELITE = r"C:\Users\adamh\AppData\Local\RuneLite\RuneLite.exe"
+#PATH_TO_RUNELITE = r"C:\Users\Adam\AppData\Local\RuneLite\RuneLite.exe"
+
+#T470s big screen
+PATH_TO_OSBUDDY = r"C:\Users\adamh\AppData\Local\OSBuddy64.exe"
 class WindowMgr:
     """Encapsulates some calls to the winapi for window management"""
 
@@ -57,10 +60,15 @@ def start_runelite():
     print('hello')
 
 
-def pooled_start_runelite():
+def start_osbuddy():
+    DETACHED_PROCESS=8
+    subprocess.Popen(os.system(PATH_TO_OSBUDDY), creationflags=subprocess.CREATE_NEW_PROCESS_GROUP, close_fds=True)
+    print('hello')
+
+def pooled_start_osbuddy():
     class MyThread(threading.Thread):
         def run(self):
-            start_runelite()
+            start_osbuddy()
             pass
     thread = MyThread()
     thread.daemon = True
@@ -75,18 +83,19 @@ def process_exists(process_name):
 
 
 def main():
-    if not process_exists("RuneLite.exe"):
-        pooled_start_runelite()
+    if not process_exists("OSBuddy64.exe"):
         print('starting waiting')
+        pooled_start_osbuddy()
         time.sleep(20)
     print('finished waiting')
     win_mgr = WindowMgr()
     time.sleep(2)
-    win_mgr.find_window_wildcard("RuneLite")
+    win_mgr.find_window_wildcard("OSBuddy")
     print(win_mgr._handle)
-    win_mgr.set_foreground()
+    win_mgr.BringToTop()
+    win_mgr.SwitchToWindow()
     time.sleep(3)
-    #win_mgr.maximize_window()
+    win_mgr.maximize_window()
 
 def window_enum_handler(hwnd, resultList):
     if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
@@ -102,7 +111,7 @@ def get_app_list(handles=[]):
 
 
 if __name__ == '__main__':
-    #main()
+    main()
     # appwindows = get_app_list()
     # for i in appwindows:
     #     print(i)
@@ -117,5 +126,5 @@ if __name__ == '__main__':
     #
     # # this here is the only line of code you actually write (SWAPY recorded the rest)
     # window.SetFocus()
-    win_mgr = WindowMgr()
-    time.sleep(2)
+    # win_mgr = WindowMgr()
+    # time.sleep(2)
