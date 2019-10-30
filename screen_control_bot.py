@@ -14,6 +14,21 @@ MAX_FAILED_MOVE_ATTEMPTS = 0
 
 
 PASSWORD = 'ce9Haq9zs12'
+
+# T470s with screen
+# COORDS ={ 'Click Here To Play': [937, 491],
+#           'Bank': [950, 499],
+#           'bank_tab_1': [559, 116],
+#           'Deposit inventory': [1042, 733]
+#
+#
+# }
+# BOXES = {
+# 'Welcome to Runescape': (800, 381, 252, 39)
+# }
+
+# Y580
+
 COORDS ={ 'Click Here To Play': [937, 491],
           'Bank': [950, 499],
           'bank_tab_1': [559, 116],
@@ -22,10 +37,7 @@ COORDS ={ 'Click Here To Play': [937, 491],
 
 }
 BOXES = {
-'Welcome to Runescape': (800, 381, 252, 39)
 }
-
-
 
 class ScreenBot():
     def __init__(self, max_cur_failed_attempts=3, max_total_failed_attempts=15, text_compare_threshold=70,
@@ -329,6 +341,7 @@ class FailedMoveAttempt(Exception):
 if __name__ == '__main__':
     pass
     b = ScreenBot()
+    b.record_screen_coords(5,0,0)
     #b.find_coordinates(2,0,0)
     #time.sleep(3)
     #b.easy_mk('num2')

@@ -8,8 +8,8 @@ import win32gui, win32con
 import re
 import pywinauto
 
-PATH_TO_RUNELITE = r"C:\Users\adamh\AppData\Local\RuneLite\RuneLite.exe"
-
+#PATH_TO_RUNELITE = r"C:\Users\adamh\AppData\Local\RuneLite\RuneLite.exe"
+PATH_TO_RUNELITE = r"C:\Users\Adam\AppData\Local\RuneLite\RuneLite.exe"
 class WindowMgr:
     """Encapsulates some calls to the winapi for window management"""
 
@@ -86,7 +86,7 @@ def main():
     print(win_mgr._handle)
     win_mgr.set_foreground()
     time.sleep(3)
-    win_mgr.maximize_window()
+    #win_mgr.maximize_window()
 
 def window_enum_handler(hwnd, resultList):
     if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
