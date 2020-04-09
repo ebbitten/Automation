@@ -182,7 +182,8 @@ def craft_dragon_hides(hides, computer="Y570"):
         B.print_sleep(1)
 
 
-def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
+def clean_herbs(num_herbs, computer="desktop", herb_type="dwarf weed"):
+    # set withdraw quantity to all
     if computer == "Y570":
         in_game_locations = [[677, 139], [1076, 67], [961, 512], [1031, 825]]
         inventory_locations = [[1752, 751], [1794, 751], [1837, 751], [1878, 748], [1752, 787], [1797, 785], [1837, 785],
@@ -191,9 +192,15 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
                      [1798, 932], [1840, 930], [1885, 931], [1756, 966], [1800, 965], [1836, 967], [1886, 968]]
     elif computer == "T470s":
         locations = [[898, 512], [1136, 78], [1728, 594], [1667, 597], [989, 506], [1667, 648]]
+    elif computer == 'desktop':
+        in_game_locations = [[696, 176],  [972, 528]]
+        inventory_locations = [[1720, 802], [1761, 798], [1805, 802], [1845, 802], [1722, 836], [1763, 837], [1804, 836],
+                               [1846, 838], [1721, 874], [1762, 875], [1803, 874], [1848, 874], [1722, 910], [1763, 907],
+                               [1804, 912], [1848, 908], [1722, 946], [1763, 946], [1805, 944], [1847, 947], [1848, 981],
+                               [1807, 981], [1764, 980], [1720, 983], [1719, 1016], [1763, 1018], [1803, 1018], [1847, 1018]]
     else:
         raise ValueError
-    in_game_phrases = ["Withdraw-1 Grimy " + str(herb_type) +" / 8 more options", "Close", "Bank Bank Booth / 3 more options", "Deposit-1 " + str(herb_type)]
+    in_game_phrases = ["Withdraw-1 Grimy " + str(herb_type) +" / 8 more options",  "Bank Bank Booth / 3 more options", "Deposit-1 " + str(herb_type)]
     inventory_phrases = ["Clean Grimy " + str(herb_type) +" / 3 more options"]
     already_selected_herb_error_text = "Use " + str(herb_type) + " -> Grimy " + str(herb_type)
     print('initiating...')
@@ -203,16 +210,10 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
         #withdraw
         B.easy_move(in_game_locations[0], in_game_phrases[0])
         time.sleep(.3)
-        B.easy_right_click()
-        B.print_sleep(.2)
-        B.easy_mk("num2")
-        B.easy_mk("num2")
         B.easy_click()
         #B.close_screen
         B.print_sleep(1)
-        B.easy_move(in_game_locations[1], in_game_phrases[1])
-        time.sleep(.3)
-        B.easy_click()
+        B.easy_press('esc')
         #clean herbs!!
         for inven_loc in inventory_locations:
             B.print_sleep(.5)
@@ -232,15 +233,11 @@ def clean_herbs(num_herbs, computer="Y570", herb_type="cadantine"):
 
         B.random_sleep()
         # open bank
-        B.easy_move(in_game_locations[2], in_game_phrases[2])
+        B.easy_move(in_game_locations[1], in_game_phrases[1])
         B.print_sleep(1.2)
         B.easy_click()
         # deposit
         B.easy_move(inventory_locations[0])
-        B.easy_right_click()
-        B.print_sleep(0.2)
-        B.easy_mk("num2")
-        B.easy_mk("num2")
         B.easy_click()
         B.print_sleep(1)
 
@@ -265,9 +262,9 @@ def repeat_script(script):
 if __name__ == '__main__':
 
 
-
-    print('transformed')
-    repeat_script(lambda: clean_herbs(10000, herb_type='Dwarf weed'))
+    clean_herbs(10000)
+    # print('transformed')
+    # repeat_script(lambda: clean_herbs(10000, herb_type='Dwarf weed'))
     pass
 
 

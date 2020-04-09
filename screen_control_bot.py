@@ -1,9 +1,9 @@
 import random
 import time
-import winsound
 import pyautogui
 import ocr
-import windows_os
+import dotenv
+import os
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
@@ -11,6 +11,8 @@ MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
+
+
 
 
 PASSWORD = 'ce9Haq9zs12'
@@ -38,6 +40,7 @@ COORDS ={ 'Click Here To Play': [970, 368],
 }
 BOXES = {
 }
+
 
 class ScreenBot():
     def __init__(self, max_cur_failed_attempts=3, max_total_failed_attempts=15, text_compare_threshold=70,
@@ -191,7 +194,7 @@ class ScreenBot():
         prevX = 0
         prevY = 0
         while counter < 5:
-            self.print_sleep(.5)
+            time.sleep(.5)
             curposition = pyautogui.position()
             curX = curposition[0]
             curY = curposition[1]
@@ -201,7 +204,7 @@ class ScreenBot():
                 y = curY
             prevX = curX
             prevY = curY
-        winsound.Beep(2500, 1000)
+        self.beep()
         return [x, y]
 
     def find_coordinates(self, hw, over_loads, prayer_pots):
@@ -221,7 +224,7 @@ class ScreenBot():
         for i in range(prayer_pots):
             new_coord = self.get_coord()
             pp_cords.append(new_coord)
-        winsound.Beep(2000, 2000)
+        self.beep()
         print(hw_coords)
         print(over_coords)
         print(pp_cords)
@@ -282,7 +285,7 @@ class ScreenBot():
         for i in range(prayer_pots):
             new_coord = self.get_coord()
             pp_cords.append(new_coord)
-        winsound.Beep(2000, 2000)
+        self.beep()
         print(hw_coords)
         print(over_coords)
         print(pp_cords)
@@ -331,7 +334,8 @@ class ScreenBot():
         time.sleep(1)
         self.click_deposit_inventory()
 
-
+    def beep(self, duration=1, freq=440):
+        os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
 
 
 class FailedMoveAttempt(Exception):
@@ -339,13 +343,13 @@ class FailedMoveAttempt(Exception):
     pass
 
 if __name__ == '__main__':
-    pass
+    # pass
     b = ScreenBot()
-    # b.record_screen_coords(5,0,0)
+    b.record_screen_coords(2,0,0)
     #b.find_coordinates(2,0,0)
     #time.sleep(3)
     #b.easy_mk('num2')
     #b.easy_mk('num2')
     #b.open_login_deposit()
-    b.open_login_deposit()
+    # b.open_login_deposit()
 

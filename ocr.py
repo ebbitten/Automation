@@ -4,7 +4,7 @@ import argparse
 import imutils
 import time
 from fuzzywuzzy import fuzz
-import winsound
+# import winsound
 import math
 from operator import itemgetter
 import pyautogui
@@ -26,16 +26,16 @@ if platform.system() == "Darwin":
 #TODO move into a config file
 #t470s
 #tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-tessdata_dir_config = '--tessdata-dir "C:\\Program Files\\Tesseract-OCR\\tessdata\\configs"'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# tessdata_dir_config = '--tessdata-dir "C:\\Program Files\\Tesseract-OCR\\tessdata\\configs"'
 #tesseract_cmd = 'C:\\Users\\Adam\\Downloads\\jTessBoxEditor-2.0.1\\jTessBoxEditor\\tesseract-ocrtesseract\\tesseract'
-TESSDATA_PREFIX=r"C:\Program Files\Tesseract-OCR\tessdata"
+# TESSDATA_PREFIX=r"C:\Program Files\Tesseract-OCR\tessdata"
 
 
 #y580
-tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
+# tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
 
-TEXTBOXY580_E = (0, 31, 300, 25)
+TEXTBOXY580_E = (68, 49, 300, 20)
 
 '''
 grabs a region (topx, topy, bottomx, bottomy)
@@ -289,8 +289,8 @@ def print_text_comparisons():
         # cv2.waitKey(0)
         text = ocr(image)
         print(fuzz.partial_ratio(phrase, text))
-        winsound.Beep(2500, 1000)
-    winsound.Beep(2000, 2000)
+        # winsound.Beep(2500, 1000)
+    # winsound.Beep(2000, 2000)
 
 
 def get_txt_from_failed_images():

@@ -1,18 +1,26 @@
-1import os
+
+
+from dotenv import load_dotenv, find_dotenv
+
+import os
+import sys
 import subprocess
 import multiprocessing as mp
 import threading
-import psutil
 import time
-import win32gui, win32con
 import re
-import pywinauto
+import psutil
+import gi
+gi.require_version('Wnck', '3.0')
+from gi.repository import Wnck
 
-PATH_TO_RUNELITE = r"C:\Users\adamh\AppData\Local\RuneLite\RuneLite.exe"
-#PATH_TO_RUNELITE = r"C:\Users\Adam\AppData\Local\RuneLite\RuneLite.exe"
 
-#T470s big screen
-PATH_TO_OSBUDDY = r"C:\Users\adamh\AppData\Local\OSBuddy64.exe"
+load_dotenv(find_dotenv())
+
+PATH_TO_RUNELITE = os.getenv('PATH_TO_RUNELITE')
+
+
+
 class WindowMgr:
     """Encapsulates some calls to the winapi for window management"""
 
@@ -56,46 +64,32 @@ class WindowMgr:
 
 def start_runelite():
     DETACHED_PROCESS=8
-    subprocess.Popen(os.system(PATH_TO_RUNELITE), creationflags=subprocess.CREATE_NEW_PROCESS_GROUP, close_fds=True)
+    # subprocess.Popen(os.system(PATH_TO_RUNELITE))
+    os.system(PATH_TO_RUNELITE)
     print('hello')
 
 
-def start_osbuddy():
-    DETACHED_PROCESS=8
-    subprocess.Popen(os.system(PATH_TO_OSBUDDY), creationflags=subprocess.CREATE_NEW_PROCESS_GROUP, close_fds=True)
-    print('hello')
 
-def pooled_start_osbuddy():
-    class MyThread(threading.Thread):
-        def run(self):
-            start_osbuddy()
-            pass
-    thread = MyThread()
-    thread.daemon = True
-    thread.start()
-    print("hello world")
-    return
-
-def process_exists(process_name):
-    if process_name in [psutil.Process(pid).name() for pid in psutil.pids()]:
+def window_exist(window_name=os.getenv('WINDOW_NAME')):
+    screen = Wnck.Screen.get_default()
+    if window_name in [window.get_name() for window in screen.get_windows()]:
         return True
-    return False
+    else:
+        return False
+
+
 
 
 def main():
-    if not process_exists("OSBuddy64.exe"):
+    if not window_exist("runelite"):
         print('starting waiting')
-        pooled_start_osbuddy()
+        start_runelite()
         time.sleep(20)
     print('finished waiting')
-    win_mgr = WindowMgr()
-    time.sleep(2)
-    win_mgr.find_window_wildcard("OSBuddy")
-    print(win_mgr._handle)
-    win_mgr.BringToTop()
-    win_mgr.SwitchToWindow()
-    time.sleep(3)
-    win_mgr.maximize_window()
+    # win_mgr.BringToTop()
+    # win_mgr.SwitchToWindow()
+    # time.sleep(3)
+    # win_mgr.maximize_window()
 
 def window_enum_handler(hwnd, resultList):
     if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
@@ -112,7 +106,7 @@ def get_app_list(handles=[]):
 
 if __name__ == '__main__':
     main()
-    # appwindows = get_app_list()
+    appwindows = get_app_list()
     # for i in appwindows:
     #     print(i)
 
