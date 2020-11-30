@@ -1,8 +1,7 @@
 import random
 import time
 import pyautogui
-import ocr
-import dotenv
+from ocr import ocr_core
 import os
 
 pyautogui.PAUSE = 0
@@ -114,7 +113,7 @@ class ScreenBot():
             self.cur_fails = 0
             while self.is_moving:
                 time.sleep(.3)
-                if ocr.screen_and_compare(text, self.text_compare_threshold, self.take_failed_screen):
+                if ocr_core.screen_and_compare(text, self.text_compare_threshold, self.take_failed_screen):
                     self.is_moving = False
                     return True
                 else:
@@ -126,7 +125,7 @@ class ScreenBot():
         self.cur_fails = 0
         self.is_moving = True
         while self.is_moving:
-            top_text_result = ocr.screen_compare_multiple_texts(text_list, threshold)
+            top_text_result = ocr_core.screen_compare_multiple_texts(text_list, threshold)
             if top_text_result:
                 self.is_moving = False
                 return top_text_result
@@ -305,7 +304,7 @@ class ScreenBot():
         self.easy_click()
 
     def login(self):
-        if not ocr.imagesearch(r"assets\Welcome to Runescape.png", .7):
+        if not ocr_core.imagesearch(r"assets\Welcome to Runescape.png", .7):
             self.easy_press('enter')
             print('Disconeccted, adding an extra enter click')
         self.easy_press('enter')
