@@ -240,4 +240,7 @@ def move(mouse_points, draw=False, rand_err=True):
 
 
 if __name__ == '__main__':
-    pass
+    dev = 2
+    speed = 5
+    move(mouse_bez((1000, 500), (1708, 809), dev, speed))
+    move(mouse_bez((1708, 809), (1767, 807), dev, speed))
