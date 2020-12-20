@@ -227,7 +227,7 @@ class ScreenBot():
         print(hw_coords)
         print(over_coords)
         print(pp_cords)
-        filePath = input("please input a filepath to save the coordinates")
+
 
     def flick_pray(self, rapidHeal):
         randInterval = random.randint(20, 30) / 100
@@ -241,6 +241,7 @@ class ScreenBot():
         time.sleep(random.normalvariate(175, 15) / 100)
         randInterval = random.normalvariate(25, 3) / 100
         pyautogui.press('esc', interval=randInterval)
+
 
     def check_and_consume(self, consumed_type, consumed_timer, coords_list, consumed_list, time_elapsed):
         if time_elapsed - consumed_timer[consumed_type] * consumed_list[consumed_type] > consumed_timer[consumed_type]:

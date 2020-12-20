@@ -257,7 +257,6 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="dwarf weed"):
         # b.print_sleep(1)
 
 
-lambda x: x()
 
 
 def repeat_script(script):
