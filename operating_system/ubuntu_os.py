@@ -1,7 +1,4 @@
-
-
 from dotenv import load_dotenv, find_dotenv
-
 import os
 import sys
 import subprocess
@@ -12,7 +9,7 @@ import re
 import psutil
 import gi
 gi.require_version('Wnck', '3.0')
-from gi.repository import Wnck
+from gi.repository import Wnck, Gtk
 
 
 load_dotenv(find_dotenv())
@@ -62,13 +59,6 @@ class WindowMgr:
 
 
 
-def start_runelite():
-    DETACHED_PROCESS=8
-    # subprocess.Popen(os.system(PATH_TO_RUNELITE))
-    os.system(PATH_TO_RUNELITE)
-    print('hello')
-
-
 
 def window_exist(window_name=os.getenv('WINDOW_NAME')):
     screen = Wnck.Screen.get_default()
@@ -78,35 +68,30 @@ def window_exist(window_name=os.getenv('WINDOW_NAME')):
         return False
 
 
-
-
-def main():
+def start_runelite():
+    DETACHED_PROCESS = 8
     if not window_exist("runelite"):
         print('starting waiting')
-        start_runelite()
-        time.sleep(20)
-    print('finished waiting')
-    # win_mgr.BringToTop()
-    # win_mgr.SwitchToWindow()
-    # time.sleep(3)
-    # win_mgr.maximize_window()
+        runelite = subprocess.Popen(PATH_TO_RUNELITE)
+        time.sleep(10)
+        print('finished waiting')
+    screen = Wnck.Screen.get_default()
+    while Gtk.events_pending():
+        Gtk.main_iteration()
+    windows = screen.get_windows()
+    for w in windows:
+        print(w.get_name())
+        if w.get_name() == 'RuneLite':
+            runelite_window = w
+    runelite_window.maximize()
+    runelite_window.activate(time.time())
+    dir(runelite_window)
 
-def window_enum_handler(hwnd, resultList):
-    if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) != '':
-        resultList.append((hwnd, win32gui.GetWindowText(hwnd)))
-
-def get_app_list(handles=[]):
-    mlst=[]
-    win32gui.EnumWindows(window_enum_handler, handles)
-    for handle in handles:
-        mlst.append(handle)
-    return mlst
 
 
 
 if __name__ == '__main__':
-    main()
-    appwindows = get_app_list()
+    start_runelite()
     # for i in appwindows:
     #     print(i)
 

@@ -1,8 +1,13 @@
 import random
 import time
 import pyautogui
+from pathlib import Path
 from ocr import ocr_core
 import os
+
+from dotenv import load_dotenv, find_dotenv
+
+from operating_system.ubuntu_os import start_runelite
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
@@ -14,7 +19,6 @@ MAX_FAILED_MOVE_ATTEMPTS = 0
 
 
 
-PASSWORD = 'ce9Haq9zs12'
 
 # T470s with screen
 # COORDS ={ 'Click Here To Play': [937, 491],
@@ -170,7 +174,7 @@ class ScreenBot():
     def easy_mk(self, numkey):
         dist = 32
         if numkey == 'num2':
-            pyautogui.moveRel(0,35,.5)
+            pyautogui.moveRel(0,35,.5).main()
 
     def easy_click(self):
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
@@ -305,11 +309,11 @@ class ScreenBot():
         self.easy_click()
 
     def login(self):
-        if not ocr_core.imagesearch(r"assets\Welcome to Runescape.png", .7):
+        if not ocr_core.imagesearch('/home/adam/PycharmProjects/Automation/assets/images/Welcome to Runescape.png', .7):
             self.easy_press('enter')
-            print('Disconeccted, adding an extra enter click')
+            print('Disconnected, adding an extra enter click')
         self.easy_press('enter')
-        keys = [str(x) for x in PASSWORD]
+        keys = [str(x) for x in os.getenv('PASSWORD')]
         self.easy_presses(keys)
         self.easy_press('enter')
         time.sleep(5)
@@ -321,7 +325,7 @@ class ScreenBot():
         pyautogui.keyUp('down')
 
     def open_and_login(self):
-        windows_os.main()
+        start_runelite()
         self.login()
 
 
@@ -345,7 +349,10 @@ class FailedMoveAttempt(Exception):
 if __name__ == '__main__':
     # pass
     b = ScreenBot()
-    b.record_screen_coords(2,0,0)
+    b.login()
+
+
+    # b.record_screen_coords(2,0,0)
     #b.find_coordinates(2,0,0)
     #time.sleep(3)
     #b.easy_mk('num2')
