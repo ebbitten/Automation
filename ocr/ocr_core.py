@@ -35,7 +35,7 @@ if platform.system() == "Darwin":
 #y580
 # tesseract_cmd = 'C:\\Program Files \\Tesseract-OCR\\tesseract'
 
-TEXTBOXY580_E = (68, 49, 300, 20)
+TEXTBOXY580_E = (70, 50, 400, 20)
 
 '''
 grabs a region (topx, topy, bottomx, bottomy)
@@ -303,5 +303,4 @@ def get_txt_from_failed_images():
 
 if __name__ == '__main__':
 
-    print(loc)
-    b.easy_move(loc)
+    takescreenshot(TEXTBOXY580_E)

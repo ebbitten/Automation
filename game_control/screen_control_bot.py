@@ -10,7 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 from operating_system.ubuntu_os import start_runelite
 
 pyautogui.PAUSE = 0
-pyautogui.FAILSAFE = False
+pyautogui.FAILSAFE = True
 MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
@@ -46,7 +46,7 @@ BOXES = {
 
 
 class ScreenBot():
-    def __init__(self, max_cur_failed_attempts=3, max_total_failed_attempts=15, text_compare_threshold=70,
+    def __init__(self, max_cur_failed_attempts=2, max_total_failed_attempts=100, text_compare_threshold=70,
                  take_failed_screen=False, take_success_screen=False):
         self.cur_pos = []
         self.prev_pos = []
@@ -339,7 +339,7 @@ class ScreenBot():
         self.click_deposit_inventory()
 
     def beep(self, duration=1, freq=440):
-        os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+        os.system('play -nq -consolet alsa synth {} sine {}'.format(duration, freq))
 
 
 class FailedMoveAttempt(Exception):
@@ -349,14 +349,6 @@ class FailedMoveAttempt(Exception):
 if __name__ == '__main__':
     # pass
     b = ScreenBot()
-    b.login()
-
-
-    # b.record_screen_coords(2,0,0)
-    #b.find_coordinates(2,0,0)
-    #time.sleep(3)
-    #b.easy_mk('num2')
-    #b.easy_mk('num2')
-    #b.open_login_deposit()
     # b.open_login_deposit()
+    b.record_screen_coords(2,0,0)
 

@@ -181,7 +181,7 @@ def craft_dragon_hides(hides, computer="Y570"):
         B.print_sleep(1)
 
 
-def clean_herbs(num_herbs, computer="desktop", herb_type="dwarf weed"):
+def clean_herbs(num_herbs, computer="desktop", herb_type="torstol"):
     # set withdraw quantity to all
     if computer == "Y570":
         in_game_locations = [[677, 139], [1076, 67], [961, 512], [1031, 825]]
@@ -196,7 +196,7 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="dwarf weed"):
     elif computer == "T470s":
         locations = [[898, 512], [1136, 78], [1728, 594], [1667, 597], [989, 506], [1667, 648]]
     elif computer == 'desktop':
-        in_game_locations = [[696, 176], [972, 528]]
+        in_game_locations = [[696, 176], [880, 541]]
         inventory_locations = [[1720, 802], [1761, 798], [1805, 802], [1845, 802], [1722, 836], [1763, 837],
                                [1804, 836],
                                [1846, 838], [1721, 874], [1762, 875], [1803, 874], [1848, 874], [1722, 910],
@@ -223,7 +223,7 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="dwarf weed"):
         B.print_sleep(1)
         B.easy_press('esc')
         # clean herbs!!
-        for inven_loc in inventory_locations:
+        for inven_loc in [inventory_locations[0]]:
             B.print_sleep(.5)
             passed = False
             ocr_result = B.move_and_decide_text(inven_loc, [inventory_phrases[0], already_selected_herb_error_text],
@@ -239,7 +239,7 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="dwarf weed"):
             elif ocr_result[1] == already_selected_herb_error_text:
                 B.click_wait(1)
                 print("accidently selected cadantine, clicking")
-
+        time.sleep(33)
         B.random_sleep()
         # open bank
         B.easy_move(in_game_locations[1], in_game_phrases[1])
