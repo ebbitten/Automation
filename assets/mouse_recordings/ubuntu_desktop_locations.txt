@@ -1,4 +1,4 @@
-x:1708 y:809 screen:0 window:65011765
+//x:1708 y:809 screen:0 window:65011765
 x:1767 y:807 screen:0 window:65011765
 x:1824 y:811 screen:0 window:65011765
 x:1824 y:812 screen:0 window:65011765

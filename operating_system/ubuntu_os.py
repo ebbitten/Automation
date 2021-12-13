@@ -52,6 +52,10 @@ def start_runelite():
     activate_window(runelite_window)
 
 
+def beep(duration=1, freq=440):
+    os.system('play -nq -consolet alsa synth {} sine {}'.format(duration, freq))
+
+
 
 if __name__ == '__main__':
     start_runelite()

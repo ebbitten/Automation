@@ -1,13 +1,12 @@
 import random
 import time
 import pyautogui
-from pathlib import Path
+
 from ocr import ocr_core
 import os
 
-from dotenv import load_dotenv, find_dotenv
-
 from operating_system.ubuntu_os import start_runelite
+from recorder.mouse_over import get_coord
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = True
@@ -15,9 +14,6 @@ MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
-
-
-
 
 
 # T470s with screen
@@ -67,17 +63,8 @@ class ScreenBot():
             self.print_sleep(abs(random.normalvariate(1.4, .1)))
             self.random_sleep()
 
-    def random_sleep(self, multiplier=1):
-        if random.random() < multiplier * .01:
-            self.print_sleep(abs(random.normalvariate(40, 5)))
-        if random.random() < multiplier *.05:
-            self.print_sleep(abs(random.normalvariate(7, 3)))
-        if random.random() < multiplier * .002:
-            print('browsing')
-            self._random_browsing()
-
-    def _random_browsing(self):
-        final_x, final_y = self.get_coord()
+    def random_browsing(self):
+        final_x, final_y = get_coord()
         print("Random Browsing")
         screenWidth, screenHeight = pyautogui.size()
         for i in range(int(max(random.normalvariate(5, 1),1))):
@@ -88,14 +75,6 @@ class ScreenBot():
             time.sleep(abs(random.normalvariate(1, .2)))
         self._human_move(final_x, final_y, move_time * 2, 4)
 
-    def print_sleep(self, time_to_sleep):
-        if time_to_sleep > 2:
-            print("time to sleep: ", time_to_sleep)
-        time.sleep(time_to_sleep)
-        if random.random() < .01:
-            print("Sleeping for a bit longer!")
-            self.random_sleep(50)
-
     def retry_move(self, location_0, location_1):
         self.cur_fails += 1
         self.total_fails += 1
@@ -105,7 +84,7 @@ class ScreenBot():
         elif self.cur_fails == self.max_cur_failed_attempts:
             print("Self total fails: " + str(self.total_fails))
             self.print_sleep(2)
-            self._random_browsing()
+            self.random_browsing()
         else:
             self._human_move(location_0, location_1, .7, 1, jiggle=True)
 
@@ -192,48 +171,7 @@ class ScreenBot():
             except:
                 pass
 
-    def get_coord(self):
-        counter = 0
-        prevX = 0
-        prevY = 0
-        while counter < 5:
-            time.sleep(.5)
-            curposition = pyautogui.position()
-            curX = curposition[0]
-            curY = curposition[1]
-            if curX == prevX and curY == prevY:
-                counter += 1
-                x = curX
-                y = curY
-            prevX = curX
-            prevY = curY
-        self.beep()
-        return [x, y]
-
-    def find_coordinates(self, hw, over_loads, prayer_pots):
-        # assume that the first position is holy wrench
-        # the second through 8th position are overloads
-        # the 9th through 28th position are prayer pots
-        hw_coords = []
-        over_coords = []
-        pp_cords = []
-        self.print_sleep(5)
-        for i in range(hw):
-            new_coord = self.get_coord()
-            hw_coords.append(new_coord)
-        for i in range(over_loads):
-            new_coord = self.get_coord()
-            over_coords.append(new_coord)
-        for i in range(prayer_pots):
-            new_coord = self.get_coord()
-            pp_cords.append(new_coord)
-        self.beep()
-        print(hw_coords)
-        print(over_coords)
-        print(pp_cords)
-
-
-    def flick_pray(self, rapidHeal):
+        def flick_pray(self, rapidHeal):
         randInterval = random.randint(20, 30) / 100
         pyautogui.press('f5', interval=randInterval)
         time.sleep(random.randint(25, 35) / 100)
@@ -262,7 +200,7 @@ class ScreenBot():
             time.sleep(.5)
             # Move to a random location occasionly
             if random.randint(0, 20) > 19:
-                self._random_browsing()
+                self.random_browsing()
             # update our consumption
             consumed_list[consumed_type] += 1
             if consumed_list[consumed_type] % 4 == 0:
@@ -272,27 +210,6 @@ class ScreenBot():
                 coords_list[consumed_type].pop(0)
                 consumed_list[consumed_type] += 1
 
-    def record_screen_coords(self, hw, over_loads, prayer_pots):
-        # assume that the first position is holy wrench
-        # the second through 8th position are overloads
-        # the 9th through 28th position are prayer pots
-        hw_coords = []
-        over_coords = []
-        pp_cords = []
-        self.print_sleep(5)
-        for i in range(hw):
-            new_coord = self.get_coord()
-            hw_coords.append(new_coord)
-        for i in range(over_loads):
-            new_coord = self.get_coord()
-            over_coords.append(new_coord)
-        for i in range(prayer_pots):
-            new_coord = self.get_coord()
-            pp_cords.append(new_coord)
-        self.beep()
-        print(hw_coords)
-        print(over_coords)
-        print(pp_cords)
 
     def click_on_bank(self):
         self.easy_move(COORDS['Bank'])
@@ -338,13 +255,13 @@ class ScreenBot():
         time.sleep(1)
         self.click_deposit_inventory()
 
-    def beep(self, duration=1, freq=440):
-        os.system('play -nq -consolet alsa synth {} sine {}'.format(duration, freq))
+    
 
 
 class FailedMoveAttempt(Exception):
     "Raised when there's too many failed movement attempts"
     pass
+
 
 if __name__ == '__main__':
     # pass
