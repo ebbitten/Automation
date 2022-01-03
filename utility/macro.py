@@ -2,7 +2,7 @@ import random
 import time
 
 
-def random_sleep(self, multiplier=1):
+def random_sleep(multiplier=1):
     val = random.random()
     if val < multiplier * .01:
         print_sleep(abs(random.normalvariate(40, 5)))

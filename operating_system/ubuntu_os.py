@@ -25,20 +25,25 @@ def window_exist(window_name=os.getenv('WINDOW_NAME')):
         return False
 
 
-def get_runelite_window():
+def _get_runelite_window():
     screen = Wnck.Screen.get_default()
     while Gtk.events_pending():
         Gtk.main_iteration()
     windows = screen.get_windows()
     for w in windows:
-        if w.get_name() == 'RuneLite':
+        if 'RuneLite' in w.get_name():
             runelite_window = w
     return runelite_window
 
 
-def activate_window(window):
+def _activate_window(window):
     window.maximize()
     window.activate(time.time())
+
+
+def activate_runelite():
+    runelite_window = _get_runelite_window()
+    _activate_window(runelite_window)
 
 
 def start_runelite():
@@ -48,17 +53,17 @@ def start_runelite():
         runelite = subprocess.Popen(PATH_TO_RUNELITE)
         time.sleep(10)
         print('finished waiting')
-    runelite_window = get_runelite_window()
-    activate_window(runelite_window)
+    activate_runelite()
 
 
 def beep(duration=1, freq=440):
-    os.system('play -nq -consolet alsa synth {} sine {}'.format(duration, freq))
+    os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
 
 
 
 if __name__ == '__main__':
-    start_runelite()
+    activate_runelite()
+    # start_runelite()
     # for i in appwindows:
     #     print(i)
 

@@ -1,7 +1,7 @@
 import json
 import time
 import pyautogui
-import utility.macro
+from utility.macro import print_sleep
 from operating_system import beep
 from pathlib import Path
 
@@ -25,10 +25,10 @@ def get_coord():
     return [x, y]
 
 
-def find_coordinates(num_spots, file_path='../assets/mouse_records/scratch.txt'):
-    utility.macro.print_sleep(5)
+def find_coordinates(num_spots, file_path=Path('../data/mouse_recordings/scratch.txt')):
+    print_sleep(5)
     coords = []
-    for i in num_spots:
+    for i in range(num_spots):
         new_coord = get_coord()
         coords.append(new_coord)
     beep()
@@ -37,6 +37,5 @@ def find_coordinates(num_spots, file_path='../assets/mouse_records/scratch.txt')
         f.writelines(json.dumps(coords))
 
 
-
-
-
+if __name__ == '__main__':
+    find_coordinates(1)

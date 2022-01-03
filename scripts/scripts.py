@@ -1,7 +1,10 @@
 # requires pyauotgui, pyhook,  pillow,
 import pyautogui, time
 from game_control import screen_control_bot
+from assets import coordinates
+from utility.macro import print_sleep
 import random
+import operating_system.ubuntu_os
 
 B = screen_control_bot.ScreenBot()
 
@@ -93,6 +96,24 @@ def sell_stuff(times):
             time.sleep(random.randint(10, 30) / 10)
         if .98 < random.random():
             time.sleep(random.randint(8, 15))
+
+
+def drop_inventory(xrange=range(0,28)):
+    pyautogui.press('shiftleft')
+    B.easy_move(coordinates.inventory_button)
+    B.easy_click()
+    print_sleep(1)
+    pyautogui.press('shiftleft')
+    with pyautogui.hold('shiftleft'):
+        try:
+            for inventory_spot in xrange:
+                coord = coordinates.inventory[inventory_spot]
+                B.easy_move(coord)
+                B.easy_click()
+            print_sleep(1)
+        except:
+            pass
+
 
 
 def tan_dragon_hides(hides, computer="Y570"):
@@ -257,8 +278,6 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="torstol"):
         # b.print_sleep(1)
 
 
-
-
 def repeat_script(script):
     while True:
         try:
@@ -271,10 +290,9 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    clean_herbs(10000)
+    drop_inventory(range(2,28))
     # print('transformed')
     # repeat_script(lambda: clean_herbs(10000, herb_type='Dwarf weed'))
-    pass
 
 # print("initializing")
 # runNMZAbsorp("Y570",0, 0, 320, 190 , 10, 14)

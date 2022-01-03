@@ -2,11 +2,13 @@ import random
 import time
 import pyautogui
 
+import ocr.ocr_lib
 from ocr import ocr_core
 import os
 
 from operating_system.ubuntu_os import start_runelite
 from recorder.mouse_over import get_coord
+from utility.macro import print_sleep
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = True
@@ -60,7 +62,7 @@ class ScreenBot():
     def click_wait(self, num):
         for i in range(num):
             self.easy_click()
-            self.print_sleep(abs(random.normalvariate(1.4, .1)))
+            print_sleep(abs(random.normalvariate(1.4, .1)))
             self.random_sleep()
 
     def random_browsing(self):
@@ -78,22 +80,21 @@ class ScreenBot():
     def retry_move(self, location_0, location_1):
         self.cur_fails += 1
         self.total_fails += 1
-        self.print_sleep(.5)
+        print_sleep(.5)
         if self.total_fails == self.max_total_failed_attempts:
             raise FailedMoveAttempt('too many failed movements')
         elif self.cur_fails == self.max_cur_failed_attempts:
             print("Self total fails: " + str(self.total_fails))
-            self.print_sleep(2)
+            print_sleep(2)
             self.random_browsing()
         else:
             self._human_move(location_0, location_1, .7, 1, jiggle=True)
 
     def easy_move(self, location, text=""):
         self._human_move(location[0], location[1], 1.2, 8)
-        self.print_sleep(.2)
+        self.is_moving = True
+        self.cur_fails = 0
         if text:
-            self.is_moving = True
-            self.cur_fails = 0
             while self.is_moving:
                 time.sleep(.3)
                 if ocr_core.screen_and_compare(text, self.text_compare_threshold, self.take_failed_screen):
@@ -104,7 +105,7 @@ class ScreenBot():
 
     def move_and_decide_text(self, location, text_list, threshold=80, max_attempts=3):
         self._human_move(location[0], location[1], 1.2, 8)
-        self.print_sleep(.2)
+        print_sleep(.2)
         self.cur_fails = 0
         self.is_moving = True
         while self.is_moving:
@@ -171,7 +172,7 @@ class ScreenBot():
             except:
                 pass
 
-        def flick_pray(self, rapidHeal):
+    def flick_pray(self, rapidHeal):
         randInterval = random.randint(20, 30) / 100
         pyautogui.press('f5', interval=randInterval)
         time.sleep(random.randint(25, 35) / 100)
@@ -226,7 +227,7 @@ class ScreenBot():
         self.easy_click()
 
     def login(self):
-        if not ocr_core.imagesearch('/home/adam/PycharmProjects/Automation/assets/images/Welcome to Runescape.png', .7):
+        if not ocr.ocr_lib.imagesearch('/home/adam/PycharmProjects/Automation/assets/images/Welcome to Runescape.png', .7):
             self.easy_press('enter')
             print('Disconnected, adding an extra enter click')
         self.easy_press('enter')
@@ -267,5 +268,4 @@ if __name__ == '__main__':
     # pass
     b = ScreenBot()
     # b.open_login_deposit()
-    b.record_screen_coords(2,0,0)
 
