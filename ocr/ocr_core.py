@@ -1,5 +1,6 @@
+from datetime import datetime
+from pathlib import Path
 import time
-import subprocess
 from PIL import Image
 import pytesseract
 from fuzzywuzzy import fuzz
@@ -7,26 +8,22 @@ from operator import itemgetter
 import cv2
 import numpy as np
 import pyautogui
-import platform
 
 from assets import coordinates
-from ocr_lib import *
-
-
-is_retina = False
-if platform.system() == "Darwin":
-    is_retina = subprocess.call("system_profiler SPDisplaysDataType | grep 'retina'", shell=True)
+from ocr.ocr_lib import *
 
 
 
+
+# Left, top, width, height
 TEXTBOXY580_E = (70, 50, 400, 20)
 
 
 def takescreenshot(region=TEXTBOXY580_E, file_path="screenshot.png"):
     image = pyautogui.screenshot(region=region)
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    cv2.imwrite("screenshot.png", image)
-    image = cv2.imread("screenshot.png")
+    cv2.imwrite(file_path, image)
+    image = cv2.imread(file_path)
     return image
 
 def ocr(image, preprocess=["thresh"]):
@@ -84,6 +81,19 @@ def take_failed_screenshot(image):
                           (0, 255, 0), 2)
     cv2.imwrite("boxed_" + filename, boxed)
 
+
+def find_image(image_filepath, precision=0.8):
+    im = takescreenshot(coordinates.screen_pyautogui_region)
+    img_rgb = np.array(im)
+    img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+    template = cv2.imread(image_filepath, 0)
+
+    res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+    if max_val < precision:
+        return [-1, -1]
+    return max_loc
+
 def print_text_comparisons():
     phrases = ["Bank Grand Exchange Booth / 23 more options", "Withdraw-1 Green dragonhide / 7 more options", "Close",
              "Cast Tan Leather / 1 more options", "Deposit-1 Green dragon leather / 6 more options"]
@@ -100,14 +110,12 @@ def print_text_comparisons():
     # winsound.Beep(2000, 2000)
 
 
-def get_txt_from_failed_images():
-    image_files = ['16_22_51_19.png',
-'16_22_51_21.png',
-'16_22_51_22.png']
-    for image_file in image_files:
-        text = ocr(cv2.imread(image_file), ["thresh"])
 
 
 if __name__ == '__main__':
+    # print(find_image("/home/adam/PycharmProjects/Automation/assets/images/leaping_sturgeon_with_pole.png"))
+    takescreenshot(coordinates.textbox_region, f'../data/screenshots/textbox/unsorted/'
+                                               f'{datetime.now().strftime("%d_%m_%Y %H:%M:%S")}.png')
 
-    takescreenshot()
+    # image = takescreenshot(coordinates.screen_pyautogui_region, "../data/screenshots/screenshot.png")
+

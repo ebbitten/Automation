@@ -38,4 +38,4 @@ def find_coordinates(num_spots, file_path=Path('../data/mouse_recordings/scratch
 
 
 if __name__ == '__main__':
-    find_coordinates(1)
+    find_coordinates(4)

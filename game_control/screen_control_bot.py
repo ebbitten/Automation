@@ -2,7 +2,6 @@ import random
 import time
 import pyautogui
 
-import ocr.ocr_lib
 from ocr import ocr_core
 import os
 
