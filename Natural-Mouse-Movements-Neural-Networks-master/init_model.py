@@ -1,6 +1,7 @@
 # from keras import Sequential
 # from keras.layers import Dense, Reshape
 from torch import nn, Tensor, from_numpy
+import torch
 
 target_path_count = 100
 
@@ -15,8 +16,8 @@ class PathNet(nn.Sequential):
         l1 = self.l1(seq.float())
         l2 = self.l2(l1)
         l3 = self.l3(l2)
-        # return torch.reshape(l3, (target_path_count, 2))
-        return l3
+        return torch.reshape(l3, (target_path_count, 2))
+        # return l3
 
 
 # def init_model_paths():

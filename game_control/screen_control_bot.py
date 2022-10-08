@@ -17,6 +17,7 @@ FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
 
 
+
 # T470s with screen
 # COORDS ={ 'Click Here To Play': [937, 491],
 #           'Bank': [950, 499],
@@ -57,6 +58,7 @@ class ScreenBot():
         self.take_failed_screen = take_failed_screen
         self.take_success_screen = take_success_screen
         self.is_moving = False
+        self.time_model =
 
     def click_wait(self, num):
         for i in range(num):
@@ -142,6 +144,8 @@ class ScreenBot():
             stepTime = totalTime / steps
             pyautogui.moveTo(x, y, stepTime, tween_choice, None, False)
         self.cur_pos = [finalx, finaly]
+
+
 
     def easy_press(self, key):
         pyautogui.press(key, interval=(random.normalvariate(25, 5) / 100))

@@ -11,7 +11,7 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 import torch
 
-TRAIN = False
+TRAIN = True
 
 
 from matplotlib.pyplot import bar
@@ -19,14 +19,11 @@ from matplotlib.pyplot import bar
 (inputs, paths, times) = dl.load_data("train/data.json")
 split = 20
 
-def make_split(xarray, split):
-    test = xarray[0:len(xarray)//split]
-    train = xarray[len(xarray)//split:-1]
-    return test, train
 
-test_inputs, train_inputs = make_split(inputs, split)
-test_paths, train_paths = make_split(paths, split)
-test_times, train_times = make_split(times, split)
+
+test_inputs, train_inputs = dl.make_split(inputs, split)
+test_paths, train_paths = dl.make_split(paths, split)
+test_times, train_times = dl.make_split(times, split)
 batch_size = 4
 
 class CustomNumericDataSet(Dataset):

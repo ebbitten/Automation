@@ -31,6 +31,12 @@ def load_data(file_path_paths):
     return l_destination, l_path, l_time
 
 
+def make_split(xarray, split):
+    test = xarray[0:len(xarray)//split]
+    train = xarray[len(xarray)//split:-1]
+    return test, train
+
+
 def load_data_from_json(file_path):
     with open(file_path) as json_file:
         data = json.load(json_file)
