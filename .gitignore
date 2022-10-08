@@ -4,6 +4,11 @@ venv
 .vscode/
 .idea
 
+Natural-Mouse-Movements-original
+
+#Models
+*.pth
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
