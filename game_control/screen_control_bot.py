@@ -1,13 +1,18 @@
-import random
-import time
-import pyautogui
-
-from ocr import ocr_core
-import os
-
+import utility.macro
 from operating_system.ubuntu_os import start_runelite
 from recorder.mouse_over import get_coord
 from utility.macro import print_sleep
+import pyautogui
+import torch
+import numpy
+from natural_mouse_movements import init_model
+import game_control.mouse_control.bezmouse
+from pathlib import Path
+from ocr import ocr_core
+import os
+import random
+import time
+
 
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = True
@@ -15,6 +20,8 @@ MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
+TIME_MODEL_PATH = Path("/home/adam/PycharmProjects/Automation/natural_mouse_movements/models/time/time-state-dict.pth")
+PATH_MODEL_PATH = Path("/home/adam/PycharmProjects/Automation/natural_mouse_movements/models/path/path-state-dict.pth")
 
 
 
@@ -58,13 +65,20 @@ class ScreenBot():
         self.take_failed_screen = take_failed_screen
         self.take_success_screen = take_success_screen
         self.is_moving = False
-        self.time_model =
+        self.time_model = init_model.TimeNet()
+        self.time_model.load_state_dict(torch.load(TIME_MODEL_PATH))
+        self.time_model.eval()
+        self.path_model = init_model.PathNet()
+        self.path_model.load_state_dict(torch.load(PATH_MODEL_PATH))
+        self.path_model.eval()
+        self.print_sleep = utility.macro.print_sleep
+        self.random_sleep = utility.macro.random_sleep
 
     def click_wait(self, num):
         for i in range(num):
             self.easy_click()
             print_sleep(abs(random.normalvariate(1.4, .1)))
-            self.random_sleep()
+            utility.macro.random_sleep()
 
     def random_browsing(self):
         final_x, final_y = get_coord()
@@ -74,9 +88,9 @@ class ScreenBot():
             x = random.randint(1, screenWidth)
             y = random.randint(1, screenHeight)
             move_time = random.randrange(15, 30, 1) / 10
-            self._human_move(x, y, move_time, 4)
+            self._human_move_bez(x, y, move_time, 4)
             time.sleep(abs(random.normalvariate(1, .2)))
-        self._human_move(final_x, final_y, move_time * 2, 4)
+        self._human_move_bez(final_x, final_y, move_time * 2, 4)
 
     def retry_move(self, location_0, location_1):
         self.cur_fails += 1
@@ -89,10 +103,10 @@ class ScreenBot():
             print_sleep(2)
             self.random_browsing()
         else:
-            self._human_move(location_0, location_1, .7, 1, jiggle=True)
+            self._human_move_bez(location_0, location_1, .7, 1, jiggle=True)
 
     def easy_move(self, location, text=""):
-        self._human_move(location[0], location[1], 1.2, 8)
+        self._human_move_bez(location[0], location[1], 1.2, 8)
         self.is_moving = True
         self.cur_fails = 0
         if text:
@@ -105,7 +119,7 @@ class ScreenBot():
                     self.retry_move(location[0], location[1])
 
     def move_and_decide_text(self, location, text_list, threshold=80, max_attempts=3):
-        self._human_move(location[0], location[1], 1.2, 8)
+        self._human_move_bez(location[0], location[1], 1.2, 8)
         print_sleep(.2)
         self.cur_fails = 0
         self.is_moving = True
@@ -118,6 +132,7 @@ class ScreenBot():
                 self.retry_move(location[0], location[1])
 
     def _human_move(self, finalx, finaly, totalTime, steps, jiggle=False):
+        print("using old human move")
         self.prev_pos = self.cur_pos
         tweens = [pyautogui.easeOutQuad, pyautogui.easeInQuad, pyautogui.easeInOutQuad]
         starting_pos = pyautogui.position()
@@ -144,6 +159,30 @@ class ScreenBot():
             stepTime = totalTime / steps
             pyautogui.moveTo(x, y, stepTime, tween_choice, None, False)
         self.cur_pos = [finalx, finaly]
+
+    def _human_move_new(self, finalx, finaly, totalTime, steps, jiggle=False):
+        self.prev_pos = self.cur_pos
+        starting_pos = pyautogui.position()
+        screen_size = pyautogui.size()
+        values = ((finalx - starting_pos[0])/screen_size[0],
+                  (finaly - starting_pos[1])/screen_size[1])
+        numpy_values = numpy.array(values).reshape(1,2)
+        inputs = torch.Tensor(numpy_values)
+        print(inputs)
+        times = self.time_model(inputs).reshape(100)
+        paths = self.path_model(inputs)
+        for time, path in zip(times, paths):
+            # print(float(path[0]))
+            # print(float(path[1]))
+            # print(float(time))
+            # print(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
+            pyautogui.moveTo(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
+        print(f'expected to go to {finalx}, {finaly}')
+        print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
+
+    def _human_move_bez(self, finalx, finaly, totalTime, steps, jiggle=False):
+        #TODO speed up, make ending location more precise
+        game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, 6, 10)
 
 
 
@@ -180,7 +219,7 @@ class ScreenBot():
         pyautogui.press('f5', interval=randInterval)
         time.sleep(random.randint(25, 35) / 100)
         randInterval = random.normalvariate(25, 3) / 10
-        self._human_move(rapidHeal[0], rapidHeal[1], randInterval, 2)
+        self._human_move_bez(rapidHeal[0], rapidHeal[1], randInterval, 2)
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
         time.sleep(random.randint(150, 200) / 100)
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
@@ -198,13 +237,11 @@ class ScreenBot():
             x = coords_list[consumed_type][0][0] + random.normalvariate(0, 2)
             y = coords_list[consumed_type][0][1] + random.normalvariate(0, 2)
             moveTime = random.randrange(20, 40, 1) / 10
-            self._human_move(x, y, moveTime, 3)
+            self._human_move_bez(x, y, moveTime, 3)
             # click
             self._do_click(duration=random.normalvariate(20, 3) / 100)
             time.sleep(.5)
             # Move to a random location occasionly
-            if random.randint(0, 20) > 19:
-                self.random_browsing()
             # update our consumption
             consumed_list[consumed_type] += 1
             if consumed_list[consumed_type] % 4 == 0:
@@ -213,7 +250,8 @@ class ScreenBot():
                 consumed_type] % 4 == 3:
                 coords_list[consumed_type].pop(0)
                 consumed_list[consumed_type] += 1
-
+            if random.randint(0, 20) > 18:
+                self.random_browsing()
 
     def click_on_bank(self):
         self.easy_move(COORDS['Bank'])
@@ -270,5 +308,6 @@ class FailedMoveAttempt(Exception):
 if __name__ == '__main__':
     # pass
     b = ScreenBot()
+    b._human_move_bez(500, 500, 3, 4)
     # b.open_login_deposit()
 

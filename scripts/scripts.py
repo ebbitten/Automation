@@ -9,7 +9,7 @@ import operating_system.ubuntu_os
 B = screen_control_bot.ScreenBot()
 
 
-def runNMZAbsorp(laptopType="Y570", oversConsumed=0, absorpConsumed=0, overConsumeCounter=320, absorpConsumeCounter=160,
+def runNMZAbsorp(laptopType="Desktop", oversConsumed=0, absorpConsumed=0, overConsumeCounter=310, absorpConsumeCounter=600,
                  numOvers=10, numAbsorps=16):
     # TODO load positions from a file
     # TODO initialize should include getting your HP down
@@ -25,11 +25,20 @@ def runNMZAbsorp(laptopType="Y570", oversConsumed=0, absorpConsumed=0, overConsu
                        [1235, 442], [1281, 441], [1154, 477], [1194, 477], [1239, 474], [1280, 476]]
         rapidHeal = [1293, 295]
     else:
-        invenCoords = [[878, 254], [921, 253], [961, 251], [832, 293], [876, 290], [917, 290], [960, 292],
-                       [835, 325], [876, 328], [917, 326], [958, 326], [835, 362], [875, 361], [917, 365],
-                       [960, 363], [834, 400], [878, 400], [918, 400], [958, 399], [833, 436], [878, 436],
-                       [917, 435], [958, 433], [833, 465], [877, 470], [916, 471], [958, 471]]
-        rapidHeal = [971, 288]
+        # invenCoords = [[878, 254], [921, 253], [961, 251], [832, 293], [876, 290], [917, 290], [960, 292],
+        #                [835, 325], [876, 328], [917, 326], [958, 326], [835, 362], [875, 361], [917, 365],
+        #                [960, 363], [834, 400], [878, 400], [918, 400], [958, 399], [833, 436], [878, 436],
+        #                [917, 435], [958, 433], [833, 465], [877, 470], [916, 471], [958, 471]]
+        # rapidHeal = [971, 288]
+        invenCoords = [[1735, 805], [1779, 805], [1821, 809], [1861, 809],
+                       [1736, 846], [1779, 847], [1820, 848], [1863, 846],
+                       [1735, 883], [1777, 880], [1819, 879], [1862, 883],
+                       [1735, 918], [1779, 918], [1820, 914], [1862, 916],
+                       [1734, 952], [1778, 952], [1820, 955], [1860, 953],
+                       [1734, 988], [1777, 987], [1818, 987], [1860, 989],
+                       [1737, 1027], [1777, 1025], [1817, 1024], [1867, 1025]]
+        rapidHeal = [1870, 840]
+
 
     # parse that coordinate let into arrays that we'll use to loop over
     overCoords = invenCoords[:numOvers]
@@ -55,7 +64,7 @@ def runNMZAbsorp(laptopType="Y570", oversConsumed=0, absorpConsumed=0, overConsu
     consumedList = [oversConsumed, absorpConsumed]
     print("starting in 5")
     B.print_sleep(5)
-    while timeElapsed < 20000:
+    while timeElapsed < 30000:
         curTime = time.time()
         timeElapsed = curTime - startTime
         lastHeal = last_heal_time(coordsList, timeElapsed, startTime, consumedList, consumedCounter, lastHeal,
@@ -262,20 +271,49 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="torstol"):
                 print("accidently selected cadantine, clicking")
         time.sleep(33)
         B.random_sleep()
-        # open bank
-        B.easy_move(in_game_locations[1], in_game_phrases[1])
-        B.print_sleep(1.2)
-        B.easy_click()
-        # deposit
-        B.easy_move(inventory_locations[0])
-        B.easy_click()
-        B.print_sleep(1)
 
-        # Deposit inventory was blanking a lot
-        # b.easy_move(in_game_locations[3], in_game_phrases[3])
-        # b.print_sleep(.2)
-        # b.easy_click()
-        # b.print_sleep(1)
+def clean_and_make_potions(num_herbs):
+    locations = [[692, 164], [741, 164], [1753, 924], [1781, 914], [1266, 584], [787, 158], [1000, 844]]
+    print('initiating...')
+    B.print_sleep(5)
+    for i in range(int(num_herbs // 28)):
+        print('on hides number: ' + str(i * 28))
+        # withdraw
+        B.easy_move(locations[0])
+        time.sleep(random.normalvariate(.3,.05))
+        B.easy_move(locations[1])
+        B.easy_click()
+        # B.close_screen
+        B.print_sleep(1)
+        B.easy_press('esc')
+        # clean herbs!!
+        B.easy_move(locations[2])
+        B.easy_click()
+        wait_time = 0
+        while wait_time < 19:
+            wait_time = random.normalvariate(22,1)
+        B.print_sleep(wait_time)
+        B.easy_click()
+        B.easy_move(locations[3])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1, .1))
+        B.easy_press('space')
+        wait_time = 0
+        while wait_time < 9:
+            wait_time = random.normalvariate(12,1)
+        B.print_sleep(wait_time)
+        B.easy_move(locations[4])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .2))
+        B.easy_move(locations[5])
+        B.easy_click()
+        B.easy_press('esc')
+        B.easy_move(locations[2])
+        B.easy_click()
+
+
+
+
 
 
 def repeat_script(script):
@@ -290,7 +328,9 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    drop_inventory(range(2,28))
+    # drop_inventory(range(2,28))
+    # print(320*16/11)
+    runNMZAbsorp("Desktop",0, 0, 320, 340, 12, 10)
     # print('transformed')
     # repeat_script(lambda: clean_herbs(10000, herb_type='Dwarf weed'))
 
