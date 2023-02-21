@@ -6,6 +6,8 @@ from utility.macro import print_sleep
 import random
 import operating_system.ubuntu_os
 
+pyautogui.FAILSAFE = True
+
 B = screen_control_bot.ScreenBot()
 
 
@@ -30,14 +32,12 @@ def runNMZAbsorp(laptopType="Desktop", oversConsumed=0, absorpConsumed=0, overCo
         #                [960, 363], [834, 400], [878, 400], [918, 400], [958, 399], [833, 436], [878, 436],
         #                [917, 435], [958, 433], [833, 465], [877, 470], [916, 471], [958, 471]]
         # rapidHeal = [971, 288]
-        invenCoords = [[1735, 805], [1779, 805], [1821, 809], [1861, 809],
-                       [1736, 846], [1779, 847], [1820, 848], [1863, 846],
-                       [1735, 883], [1777, 880], [1819, 879], [1862, 883],
-                       [1735, 918], [1779, 918], [1820, 914], [1862, 916],
-                       [1734, 952], [1778, 952], [1820, 955], [1860, 953],
-                       [1734, 988], [1777, 987], [1818, 987], [1860, 989],
-                       [1737, 1027], [1777, 1025], [1817, 1024], [1867, 1025]]
-        rapidHeal = [1870, 840]
+        invenCoords = [[1700,  808], [1744,  808], [1786,  812], [1826,  812], [1701, 849], [1744, 850], [1785, 851],
+                       [1828, 849], [1700, 886], [1742, 883], [1784, 882], [1827, 886], [1700, 921], [1744, 921],
+                       [1785, 917], [1827, 919], [1699, 955], [1743, 955], [1785, 958], [1825, 956], [1699, 991],
+                       [1742, 990], [1783, 990], [1825, 992], [1702, 1030], [1742, 1028], [1782, 1027], [1832, 1028]]
+
+        rapidHeal = [1835, 843]
 
 
     # parse that coordinate let into arrays that we'll use to loop over
@@ -273,13 +273,14 @@ def clean_herbs(num_herbs, computer="desktop", herb_type="torstol"):
         B.random_sleep()
 
 def clean_and_make_potions(num_herbs):
-    locations = [[692, 164], [741, 164], [1753, 924], [1781, 914], [1266, 584], [787, 158], [1000, 844]]
+    locations = [[710, 160], [755, 162], [1736, 915], [1778, 915], [1270, 533], [805, 158], [1019, 841]]
     print('initiating...')
     B.print_sleep(5)
-    for i in range(int(num_herbs // 28)):
-        print('on hides number: ' + str(i * 28))
+    for i in range(int(num_herbs // 14)):
+        print('on hides number: ' + str(i * 14))
         # withdraw
         B.easy_move(locations[0])
+        B.easy_click()
         time.sleep(random.normalvariate(.3,.05))
         B.easy_move(locations[1])
         B.easy_click()
@@ -290,13 +291,14 @@ def clean_and_make_potions(num_herbs):
         B.easy_move(locations[2])
         B.easy_click()
         wait_time = 0
-        while wait_time < 19:
-            wait_time = random.normalvariate(22,1)
+        while wait_time < 18:
+            wait_time = random.normalvariate(21,1)
         B.print_sleep(wait_time)
         B.easy_click()
         B.easy_move(locations[3])
+        B.print_sleep(random.normalvariate(.5, .05))
         B.easy_click()
-        B.print_sleep(random.normalvariate(1, .1))
+        B.print_sleep(random.normalvariate(1.5, .1))
         B.easy_press('space')
         wait_time = 0
         while wait_time < 9:
@@ -307,12 +309,127 @@ def clean_and_make_potions(num_herbs):
         B.print_sleep(random.normalvariate(1.5, .2))
         B.easy_move(locations[5])
         B.easy_click()
+        B.print_sleep(random.normalvariate(1, .1))
         B.easy_press('esc')
         B.easy_move(locations[2])
         B.easy_click()
+        B.print_sleep(random.normalvariate(1, .1))
+        B.easy_move(locations[3])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .1))
+        B.easy_press('space')
+        wait_time = 0
+        while wait_time < 15:
+            wait_time = random.normalvariate(15, 1)
+        B.print_sleep(wait_time)
+        B.easy_move(locations[4])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1, .1))
+        B.easy_move(locations[6])
+        B.easy_click()
+        B.print_sleep(1)
+
+def fletch(num_items, action_key='3',activity_timer=45):
+    locations = [[714, 160], [1776, 915], [1818, 915], [1270, 533], [1019, 841]]
+    print('initiating...')
+    B.print_sleep(5)
+    for i in range(int(num_items // 27)):
+        print('on hides number: ' + str(i * 28))
+        # withdraw
+        B.easy_move(locations[0])
+        B.easy_click()
+        # B.close_screen
+        B.print_sleep(1)
+        B.easy_press('esc')
+        # clean herbs!!
+        B.easy_move(locations[1])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1, .05))
+        B.easy_move(locations[2])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .1))
+        if action_key:
+            B.easy_press(action_key)
+        wait_time = 0
+        while wait_time < activity_timer:
+            wait_time = random.normalvariate(activity_timer + 3, 1)
+        B.print_sleep(wait_time)
+        B.easy_move(locations[3])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .2))
+        B.easy_move(locations[4])
+        B.easy_click()
+        B.print_sleep(1)
 
 
+def cook(num_items, action_key='space',activity_timer=59):
+    locations = [[711, 160], [1739, 843], [912, 426], [669, 550], [1019, 841]]
+    print('initiating...')
+    B.print_sleep(3)
+    for i in range(int(num_items // 28)):
+        print('on hides number: ' + str(i * 28))
+        # withdraw
+        B.easy_move(locations[0])
+        B.easy_click()
+        # B.close_screen
+        B.print_sleep(1)
+        B.easy_press('esc')
+        # clean herbs!!
+        B.easy_move(locations[1])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1, .05))
+        B.easy_move(locations[2])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .1))
+        B.easy_press(action_key)
+        wait_time = 0
+        while wait_time < activity_timer:
+            wait_time = random.normalvariate(activity_timer + 3, 1)
+        B.print_sleep(wait_time)
+        B.easy_move(locations[3])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .2))
+        B.easy_move(locations[4])
+        B.easy_click()
+        B.print_sleep(1)
 
+
+def superheat(num_seaweed):
+    locations = [[759, 486], [809, 485], [795, 544], [1684, 900], [1272, 538], [1021, 844]]
+    print('initiating...')
+    B.print_sleep(3)
+    for i in range(int(num_seaweed // 2)):
+        print('on hides number: ' + str(i * 2))
+        # withdraw
+        B.easy_move(locations[0])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_click()
+        B.easy_move(locations[1])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_click()
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_right_click()
+        B.print_sleep(random.normalvariate(.25, .05))
+        B.easy_move(locations[2])
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_click()
+        # B.close_screen
+        B.print_sleep(1)
+        B.easy_press('esc')
+        # clean herbs!!
+        B.easy_move(locations[3])
+        B.easy_click()
+        B.print_sleep(random.normalvariate(1.5, .05))
+        B.easy_move(locations[4])
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_click()
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_move(locations[5])
+        B.print_sleep(random.normalvariate(.5, .05))
+        B.easy_click()
+        B.print_sleep(random.normalvariate(.5, .05))
 
 
 
@@ -328,23 +445,9 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    # drop_inventory(range(2,28))
-    # print(320*16/11)
-    runNMZAbsorp("Desktop",0, 0, 320, 340, 12, 10)
-    # print('transformed')
-    # repeat_script(lambda: clean_herbs(10000, herb_type='Dwarf weed'))
+    # superheat(1390)
+    # clean_and_make_potions(587)
+    # fletch(411, action_key='')
+    # cook(5700, 'space', 59)
+    runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
 
-# print("initializing")
-# runNMZAbsorp("Y570",0, 0, 320, 190 , 10, 14)
-# findCoordinates(2,0,0)
-# requires pyauotgui, pyhook,  pillow,
-
-# findCoordinates(5,0,0)
-# tanDragonHides(15000, computer="Y570")s
-
-# craft_dragon_hides(20000, computer="Y570")
-# clean_herbs(10000)
-
-
-# 521xhz4FRkTc
-# screen_control_bot.ScreenBot().find_coordinates(1,0,0)

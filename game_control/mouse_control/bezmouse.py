@@ -11,6 +11,8 @@ CWD = os.path.dirname(os.path.realpath(__file__))
 print(CWD)
 
 pyautogui.MINIMUM_DURATION = 0.01
+pyautogui.FAILSAFE = True
+
 
 
 def real_click():

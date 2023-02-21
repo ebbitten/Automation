@@ -12,6 +12,7 @@ from ocr import ocr_core
 import os
 import random
 import time
+import math
 
 
 pyautogui.PAUSE = 0
@@ -87,10 +88,9 @@ class ScreenBot():
         for i in range(int(max(random.normalvariate(5, 1),1))):
             x = random.randint(1, screenWidth)
             y = random.randint(1, screenHeight)
-            move_time = random.randrange(15, 30, 1) / 10
-            self._human_move_bez(x, y, move_time, 4)
+            self.easy_move((x, y),tolerance=10)
             time.sleep(abs(random.normalvariate(1, .2)))
-        self._human_move_bez(final_x, final_y, move_time * 2, 4)
+        self.easy_move((final_x, final_y))
 
     def retry_move(self, location_0, location_1):
         self.cur_fails += 1
@@ -103,10 +103,13 @@ class ScreenBot():
             print_sleep(2)
             self.random_browsing()
         else:
-            self._human_move_bez(location_0, location_1, .7, 1, jiggle=True)
+            self._human_move_bez((location_0, location_1))
 
-    def easy_move(self, location, text=""):
-        self._human_move_bez(location[0], location[1], 1.2, 8)
+    def easy_move(self, location, text="", tolerance=4, deviation=4):
+        # while math.dist(pyautogui.position(), location)>tolerance:
+        #     self._human_move_bez(location[0], location[1], deviation)
+        self._human_move_bez(location[0], location[1], deviation+4)
+        self._human_move_bez(location[0], location[1], deviation)
         self.is_moving = True
         self.cur_fails = 0
         if text:
@@ -119,7 +122,7 @@ class ScreenBot():
                     self.retry_move(location[0], location[1])
 
     def move_and_decide_text(self, location, text_list, threshold=80, max_attempts=3):
-        self._human_move_bez(location[0], location[1], 1.2, 8)
+        self.easy_move((location[0], location[1]))
         print_sleep(.2)
         self.cur_fails = 0
         self.is_moving = True
@@ -160,7 +163,7 @@ class ScreenBot():
             pyautogui.moveTo(x, y, stepTime, tween_choice, None, False)
         self.cur_pos = [finalx, finaly]
 
-    def _human_move_new(self, finalx, finaly, totalTime, steps, jiggle=False):
+    def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
         self.prev_pos = self.cur_pos
         starting_pos = pyautogui.position()
         screen_size = pyautogui.size()
@@ -180,9 +183,8 @@ class ScreenBot():
         print(f'expected to go to {finalx}, {finaly}')
         print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
 
-    def _human_move_bez(self, finalx, finaly, totalTime, steps, jiggle=False):
-        #TODO speed up, make ending location more precise
-        game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, 6, 10)
+    def _human_move_bez(self, finalx, finaly, deviation=6):
+        game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
 
 
 
@@ -219,7 +221,7 @@ class ScreenBot():
         pyautogui.press('f5', interval=randInterval)
         time.sleep(random.randint(25, 35) / 100)
         randInterval = random.normalvariate(25, 3) / 10
-        self._human_move_bez(rapidHeal[0], rapidHeal[1], randInterval, 2)
+        self.easy_move((rapidHeal[0], rapidHeal[1]))
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
         time.sleep(random.randint(150, 200) / 100)
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
@@ -237,8 +239,9 @@ class ScreenBot():
             x = coords_list[consumed_type][0][0] + random.normalvariate(0, 2)
             y = coords_list[consumed_type][0][1] + random.normalvariate(0, 2)
             moveTime = random.randrange(20, 40, 1) / 10
-            self._human_move_bez(x, y, moveTime, 3)
+            self.easy_move((x, y))
             # click
+            time.sleep(.25)
             self._do_click(duration=random.normalvariate(20, 3) / 100)
             time.sleep(.5)
             # Move to a random location occasionly
@@ -308,6 +311,5 @@ class FailedMoveAttempt(Exception):
 if __name__ == '__main__':
     # pass
     b = ScreenBot()
-    b._human_move_bez(500, 500, 3, 4)
     # b.open_login_deposit()
 

@@ -26,7 +26,7 @@ def get_coord():
 
 
 def find_coordinates(num_spots, file_path=Path('../data/mouse_recordings/scratch.txt')):
-    print_sleep(5)
+    print_sleep(3)
     coords = []
     for i in range(num_spots):
         new_coord = get_coord()
