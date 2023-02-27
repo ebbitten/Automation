@@ -1,5 +1,6 @@
 # requires pyauotgui, pyhook,  pillow,
 import pyautogui, time
+import math
 from game_control import screen_control_bot
 from assets import coordinates
 from utility.macro import print_sleep
@@ -27,11 +28,6 @@ def runNMZAbsorp(laptopType="Desktop", oversConsumed=0, absorpConsumed=0, overCo
                        [1235, 442], [1281, 441], [1154, 477], [1194, 477], [1239, 474], [1280, 476]]
         rapidHeal = [1293, 295]
     else:
-        # invenCoords = [[878, 254], [921, 253], [961, 251], [832, 293], [876, 290], [917, 290], [960, 292],
-        #                [835, 325], [876, 328], [917, 326], [958, 326], [835, 362], [875, 361], [917, 365],
-        #                [960, 363], [834, 400], [878, 400], [918, 400], [958, 399], [833, 436], [878, 436],
-        #                [917, 435], [958, 433], [833, 465], [877, 470], [916, 471], [958, 471]]
-        # rapidHeal = [971, 288]
         invenCoords = [[1700,  808], [1744,  808], [1786,  812], [1826,  812], [1701, 849], [1744, 850], [1785, 851],
                        [1828, 849], [1700, 886], [1742, 883], [1784, 882], [1827, 886], [1700, 921], [1744, 921],
                        [1785, 917], [1827, 919], [1699, 955], [1743, 955], [1785, 958], [1825, 956], [1699, 991],
@@ -91,28 +87,10 @@ def last_heal_time(coords_list, time_elapsed, start_time, consumed_list, consume
     return last_heal
 
 
-def sell_stuff(times):
-    # needs numkeys///osBuddy on with distance = 90
-    for t in range(times):
-        print('sold ', '\n', t)
-        B.do_click(button='right', duration=(random.randint(20, 30) / 100))
-        time.sleep(random.randint(20, 30) / 100)
-        pyautogui.press('num2', interval=random.randint(20, 30) / 100)
-        pyautogui.press('num5', interval=random.randint(20, 30) / 100)
-        pyautogui.press('num8', interval=random.randint(20, 30) / 100)
-        time.sleep(random.randint(20, 30) / 100)
-        if .9 < random.random():
-            time.sleep(random.randint(10, 30) / 10)
-        if .98 < random.random():
-            time.sleep(random.randint(8, 15))
-
-
-def drop_inventory(xrange=range(0,28)):
-    pyautogui.press('shiftleft')
-    B.easy_move(coordinates.inventory_button)
-    B.easy_click()
+def drop_inventory(xrange=range(0,28), goto_inven=True):
+    if goto_inven:
+        B.easy_press('esc')
     print_sleep(1)
-    pyautogui.press('shiftleft')
     with pyautogui.hold('shiftleft'):
         try:
             for inventory_spot in xrange:
@@ -122,6 +100,16 @@ def drop_inventory(xrange=range(0,28)):
             print_sleep(1)
         except:
             pass
+
+def prif_fish(xtime = 4.5 * 60 *60, activity_timer = 125):
+    fish_spot = [922, 859]
+    time.sleep(2)
+    for i in range(math.floor( xtime//(activity_timer+30))):
+        B.easy_move(fish_spot)
+        print_sleep(random.normalvariate(0.3, 0.05))
+        B.easy_click()
+        print_sleep(random.normalvariate(activity_timer+10,5))
+        drop_inventory(range(0, 26), goto_inven=False)
 
 
 
@@ -449,5 +437,5 @@ if __name__ == '__main__':
     # clean_and_make_potions(587)
     # fletch(411, action_key='')
     # cook(5700, 'space', 59)
-    runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
-
+    # runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
+    prif_fish()
