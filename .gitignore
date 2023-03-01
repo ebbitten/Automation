@@ -3,7 +3,7 @@ venv
 .env
 .vscode/
 .idea
-game_control/tmp/*
+game_control/mouse_control/tmp/
 
 Natural-Mouse-Movements-original
 
