@@ -21,10 +21,6 @@ MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
-TIME_MODEL_PATH = Path("/home/adam/PycharmProjects/Automation/natural_mouse_movements/models/time/time-state-dict.pth")
-PATH_MODEL_PATH = Path("/home/adam/PycharmProjects/Automation/natural_mouse_movements/models/path/path-state-dict.pth")
-
-
 
 # T470s with screen
 # COORDS ={ 'Click Here To Play': [937, 491],
@@ -66,12 +62,6 @@ class ScreenBot():
         self.take_failed_screen = take_failed_screen
         self.take_success_screen = take_success_screen
         self.is_moving = False
-        self.time_model = init_model.TimeNet()
-        self.time_model.load_state_dict(torch.load(TIME_MODEL_PATH))
-        self.time_model.eval()
-        self.path_model = init_model.PathNet()
-        self.path_model.load_state_dict(torch.load(PATH_MODEL_PATH))
-        self.path_model.eval()
         self.print_sleep = utility.macro.print_sleep
         self.random_sleep = utility.macro.random_sleep
 
@@ -134,59 +124,8 @@ class ScreenBot():
             else:
                 self.retry_move(location[0], location[1])
 
-    def _human_move(self, finalx, finaly, totalTime, steps, jiggle=False):
-        print("using old human move")
-        self.prev_pos = self.cur_pos
-        tweens = [pyautogui.easeOutQuad, pyautogui.easeInQuad, pyautogui.easeInOutQuad]
-        starting_pos = pyautogui.position()
-        # If we're already on the spot just go ahead and get ready to click
-        if not jiggle:
-            if ((abs(finalx - starting_pos[0]) + abs(finaly - starting_pos[1])) ** .5) < 5:
-                return
-        # otherwise move there over a series of steps
-        # TODO make this look a lot more "human"
-        step_variance = 5
-        last_variance = 3
-        if jiggle:
-            last_variance = 5
-        for i in range(1, steps + 1):
-            tween_choice = random.choice(tweens)
-            x = starting_pos[0] * (steps - i) / steps + finalx * (i) / steps
-            y = starting_pos[1] * (steps - i) / steps + finaly * (i) / steps
-            if i < steps:
-                x += random.normalvariate(0, step_variance)
-                y += random.normalvariate(0, step_variance)
-            elif i == steps:
-                x += random.normalvariate(0, last_variance)
-                y += random.normalvariate(0, last_variance)
-            stepTime = totalTime / steps
-            pyautogui.moveTo(x, y, stepTime, tween_choice, None, False)
-        self.cur_pos = [finalx, finaly]
-
-    def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
-        self.prev_pos = self.cur_pos
-        starting_pos = pyautogui.position()
-        screen_size = pyautogui.size()
-        values = ((finalx - starting_pos[0])/screen_size[0],
-                  (finaly - starting_pos[1])/screen_size[1])
-        numpy_values = numpy.array(values).reshape(1,2)
-        inputs = torch.Tensor(numpy_values)
-        print(inputs)
-        times = self.time_model(inputs).reshape(100)
-        paths = self.path_model(inputs)
-        for time, path in zip(times, paths):
-            # print(float(path[0]))
-            # print(float(path[1]))
-            # print(float(time))
-            # print(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-            pyautogui.moveTo(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-        print(f'expected to go to {finalx}, {finaly}')
-        print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
-
     def _human_move_bez(self, finalx, finaly, deviation=6):
         game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
-
-
 
     def easy_press(self, key):
         pyautogui.press(key, interval=(random.normalvariate(25, 5) / 100))
