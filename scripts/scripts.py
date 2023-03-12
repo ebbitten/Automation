@@ -101,8 +101,9 @@ def drop_inventory(xrange=range(0,28), goto_inven=True):
         except:
             pass
 
-def prif_fish(xtime = 4.5 * 60 *60, activity_timer = 125):
+def prif_fish(activity_timer = 115):
     fish_spot = [922, 859]
+    xtime = 4.5 * 60 * 60
     time.sleep(2)
     for i in range(math.floor( xtime//(activity_timer+30))):
         B.easy_move(fish_spot)
@@ -451,9 +452,7 @@ def repeat_script(script):
 
 if __name__ == '__main__':
     # superheat(1390)
-    # clean_and_make_potions(587)
-    # fletch(411, action_key='')
-    # cook(5700, 'space', 59)
     # runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
-    drop_inventory(range(0,26))
-    prif_fish()
+    prif_fish(115)
+
+
