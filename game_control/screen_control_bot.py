@@ -134,34 +134,6 @@ class ScreenBot():
             else:
                 self.retry_move(location[0], location[1])
 
-    def _human_move(self, finalx, finaly, totalTime, steps, jiggle=False):
-        print("using old human move")
-        self.prev_pos = self.cur_pos
-        tweens = [pyautogui.easeOutQuad, pyautogui.easeInQuad, pyautogui.easeInOutQuad]
-        starting_pos = pyautogui.position()
-        # If we're already on the spot just go ahead and get ready to click
-        if not jiggle:
-            if ((abs(finalx - starting_pos[0]) + abs(finaly - starting_pos[1])) ** .5) < 5:
-                return
-        # otherwise move there over a series of steps
-        # TODO make this look a lot more "human"
-        step_variance = 5
-        last_variance = 3
-        if jiggle:
-            last_variance = 5
-        for i in range(1, steps + 1):
-            tween_choice = random.choice(tweens)
-            x = starting_pos[0] * (steps - i) / steps + finalx * (i) / steps
-            y = starting_pos[1] * (steps - i) / steps + finaly * (i) / steps
-            if i < steps:
-                x += random.normalvariate(0, step_variance)
-                y += random.normalvariate(0, step_variance)
-            elif i == steps:
-                x += random.normalvariate(0, last_variance)
-                y += random.normalvariate(0, last_variance)
-            stepTime = totalTime / steps
-            pyautogui.moveTo(x, y, stepTime, tween_choice, None, False)
-        self.cur_pos = [finalx, finaly]
 
     def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
         self.prev_pos = self.cur_pos
@@ -212,6 +184,7 @@ class ScreenBot():
             pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
         except:
             try:
+                print('click failed')
                 pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
             except:
                 pass

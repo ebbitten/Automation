@@ -420,6 +420,23 @@ def superheat(num_seaweed):
         B.print_sleep(random.normalvariate(.5, .05))
 
 
+def smelt_cannonball(num_steel_bar):
+    B.print_sleep(3)
+    for i in range(num_steel_bar // 26):
+        print(f'on steelbar number {i * 26}')
+        B.easy_move(coordinates.first_bank_spot)
+        B.print_sleep(random.normalvariate(0.25, 0.2))
+        B.easy_click()
+        B.easy_move(coordinates.prif_furnace)
+        B.print_sleep(random.normalvariate(0.25, 0.2))
+        B.easy_click()
+        B.print_sleep(random.normalvariate(5, 0.3))
+        B.easy_press('space')
+        B.print_sleep(random.normalvariate(90, 1))
+        B.easy_move(coordinates.prif_bank_from_furnace)
+        B.easy_click()
+        B.print_sleep(5, 0.3)
+
 
 def repeat_script(script):
     while True:
@@ -438,4 +455,5 @@ if __name__ == '__main__':
     # fletch(411, action_key='')
     # cook(5700, 'space', 59)
     # runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
+    drop_inventory(range(0,26))
     prif_fish()
