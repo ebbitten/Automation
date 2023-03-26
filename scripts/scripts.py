@@ -103,9 +103,9 @@ def drop_inventory(xrange=range(0,28), goto_inven=True):
 
 def prif_fish(activity_timer = 115):
     fish_spot = [922, 859]
-    xtime = 4.5 * 60 * 60
+    xtime = 4 * 60 * 60
     time.sleep(2)
-    for i in range(math.floor( xtime//(activity_timer+30))):
+    for i in range(math.floor( xtime//(activity_timer+40))):
         B.easy_move(fish_spot)
         print_sleep(random.normalvariate(0.3, 0.05))
         B.easy_click()
@@ -319,7 +319,7 @@ def clean_and_make_potions(num_herbs):
         B.print_sleep(1)
 
 def fletch(num_items, action_key='3',activity_timer=45):
-    locations = [[714, 160], [1776, 915], [1818, 915], [1270, 533], [1019, 841]]
+    locations = coordinates.fletch_locations
     print('initiating...')
     B.print_sleep(5)
     for i in range(int(num_items // 27)):
@@ -436,10 +436,10 @@ def repeat_script(script):
 if __name__ == '__main__':
     # superheat(1390)
     # clean_and_make_potions(587)
-    # fletch(411, action_key='')
+    fletch(10000, action_key='3')
     # cook(5700, 'space', 59)
     # runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
     # drop_inventory(range(0,26))
-    prif_fish(115)
+    # prif_fish(105)
 
 
