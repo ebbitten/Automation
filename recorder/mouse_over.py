@@ -1,7 +1,7 @@
 import json
 import time
 import pyautogui
-from utility.macro import print_sleep
+from game_control.screen_control_bot import print_sleep
 from operating_system import beep
 from pathlib import Path
 
