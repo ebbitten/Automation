@@ -124,6 +124,30 @@ class ScreenBot():
             else:
                 self.retry_move(location[0], location[1])
 
+<<<<<<< HEAD
+
+    def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
+        self.prev_pos = self.cur_pos
+        starting_pos = pyautogui.position()
+        screen_size = pyautogui.size()
+        values = ((finalx - starting_pos[0])/screen_size[0],
+                  (finaly - starting_pos[1])/screen_size[1])
+        numpy_values = numpy.array(values).reshape(1,2)
+        inputs = torch.Tensor(numpy_values)
+        print(inputs)
+        times = self.time_model(inputs).reshape(100)
+        paths = self.path_model(inputs)
+        for time, path in zip(times, paths):
+            # print(float(path[0]))
+            # print(float(path[1]))
+            # print(float(time))
+            # print(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
+            pyautogui.moveTo(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
+        print(f'expected to go to {finalx}, {finaly}')
+        print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
+
+=======
+>>>>>>> 8c23e4df33aa56f59a9e3abb7328aae035e154bc
     def _human_move_bez(self, finalx, finaly, deviation=6):
         game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
 
@@ -151,6 +175,7 @@ class ScreenBot():
             pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
         except:
             try:
+                print('click failed')
                 pyautogui.click(clicks=clicks, interval=interval, button=button, duration=duration)
             except:
                 pass
