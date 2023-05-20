@@ -81,7 +81,7 @@ def last_heal_time(coords_list, time_elapsed, start_time, consumed_list, consume
     for i in range(2):
         if coords_list[i]:
             B.check_and_consume(i, consumed_timer, coords_list, consumed_list, time_elapsed)
-    if time.time() - last_heal > 30:
+    if time.time() - last_heal > 25:
         B.flick_pray(rapid_heal)
         last_heal = time.time()
     return last_heal
@@ -323,7 +323,7 @@ def fletch(num_items, action_key='3',activity_timer=45):
     print('initiating...')
     B.print_sleep(5)
     for i in range(int(num_items // 27)):
-        print('on hides number: ' + str(i * 28))
+        print('on hides number: ' + str(i * 27))
         # withdraw
         B.easy_move(locations[0])
         B.easy_click()
@@ -352,7 +352,8 @@ def fletch(num_items, action_key='3',activity_timer=45):
 
 
 def cook(num_items, action_key='space',activity_timer=59):
-    locations = [[711, 160], [1739, 843], [912, 426], [669, 550], [1019, 841]]
+    locations = [[713, 173], [1235, 649], [955, 435], [1017, 854]]
+
     print('initiating...')
     B.print_sleep(3)
     for i in range(int(num_items // 28)):
@@ -366,19 +367,16 @@ def cook(num_items, action_key='space',activity_timer=59):
         # clean herbs!!
         B.easy_move(locations[1])
         B.easy_click()
-        B.print_sleep(random.normalvariate(1, .05))
-        B.easy_move(locations[2])
-        B.easy_click()
         B.print_sleep(random.normalvariate(1.5, .1))
         B.easy_press(action_key)
         wait_time = 0
         while wait_time < activity_timer:
             wait_time = random.normalvariate(activity_timer + 3, 1)
         B.print_sleep(wait_time)
-        B.easy_move(locations[3])
+        B.easy_move(locations[2])
         B.easy_click()
         B.print_sleep(random.normalvariate(1.5, .2))
-        B.easy_move(locations[4])
+        B.easy_move(locations[3])
         B.easy_click()
         B.print_sleep(1)
 
@@ -451,11 +449,13 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    # superheat(1390)
-    # clean_and_make_potions(587)
-    fletch(10000, action_key='3')
-    # cook(5700, 'space', 59)
-    # runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
+    # superheat(1300)
+    # clean_and_make_potions(1303)
+    # fletch(5500, action_key=False, activity_timer=50)
+    # cook(6000, 'space', 59)
+    cook(3261, 'space', 59)
+    # runNMZAbsorp("Desktop",0, 0, 310, 207, 10, 13)
+    # runNMZAbsorp("Desktop", 0, 0, 310, 377, 15, 9)
     # drop_inventory(range(0,26))
     # prif_fish(105)
 

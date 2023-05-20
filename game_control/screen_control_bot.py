@@ -124,7 +124,6 @@ class ScreenBot():
             else:
                 self.retry_move(location[0], location[1])
 
-<<<<<<< HEAD
 
     def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
         self.prev_pos = self.cur_pos
@@ -146,8 +145,6 @@ class ScreenBot():
         print(f'expected to go to {finalx}, {finaly}')
         print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
 
-=======
->>>>>>> 8c23e4df33aa56f59a9e3abb7328aae035e154bc
     def _human_move_bez(self, finalx, finaly, deviation=6):
         game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
 
