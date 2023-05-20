@@ -1,10 +1,10 @@
 # requires pyauotgui, pyhook,  pillow,
 import pyautogui, time
-from game_control import screen_control_bot
 from assets import coordinates
+from game_control import screen_control_bot
+
 from game_control.screen_control_bot import print_sleep
 import random
-
 pyautogui.FAILSAFE = True
 
 B = screen_control_bot.ScreenBot()
@@ -34,3 +34,5 @@ def repeat_script(script):
             print('Restarting')
             time.sleep(random.normalvariate(4 * 3600, 1000))
 
+if __name__ == '__main__':
+    drop_inventory(5)

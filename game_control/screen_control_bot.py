@@ -1,4 +1,3 @@
-import utility.macro
 from operating_system.ubuntu_os import start_runelite
 from recorder.mouse_over import get_coord
 import pyautogui
@@ -8,6 +7,7 @@ from natural_mouse_movements import init_model
 import game_control.mouse_control.bezmouse
 from pathlib import Path
 from ocr import ocr_core
+import ocr
 import os
 import random
 import time
@@ -50,10 +50,11 @@ class FailedMoveAttempt(Exception):
     pass
 
 
-
 def print_sleep(time_to_sleep):
     print("time to sleep: ", time_to_sleep)
     time.sleep(time_to_sleep)
+
+
 def random_sleep(multiplier=1):
     val = random.random()
     if val < multiplier * .01:
@@ -62,6 +63,7 @@ def random_sleep(multiplier=1):
         print_sleep(abs(random.normalvariate(7, 3)))
     else:
         print_sleep(abs(random.normalvariate(2,1)))
+
 
 class ScreenBot():
     def __init__(self, max_cur_failed_attempts=2, max_total_failed_attempts=100, text_compare_threshold=70,
@@ -78,14 +80,14 @@ class ScreenBot():
         self.take_failed_screen = take_failed_screen
         self.take_success_screen = take_success_screen
         self.is_moving = False
-        self.print_sleep = utility.macro.print_sleep
-        self.random_sleep = utility.macro.random_sleep
+        self.print_sleep = print_sleep
+        self.random_sleep = random_sleep
 
     def click_wait(self, num):
         for i in range(num):
             self.easy_click()
             print_sleep(abs(random.normalvariate(1.4, .1)))
-            utility.macro.random_sleep()
+            self.random_sleep()
 
     def random_browsing(self):
         final_x, final_y = get_coord()
@@ -140,30 +142,6 @@ class ScreenBot():
             else:
                 self.retry_move(location[0], location[1])
 
-<<<<<<< HEAD
-
-    def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
-        self.prev_pos = self.cur_pos
-        starting_pos = pyautogui.position()
-        screen_size = pyautogui.size()
-        values = ((finalx - starting_pos[0])/screen_size[0],
-                  (finaly - starting_pos[1])/screen_size[1])
-        numpy_values = numpy.array(values).reshape(1,2)
-        inputs = torch.Tensor(numpy_values)
-        print(inputs)
-        times = self.time_model(inputs).reshape(100)
-        paths = self.path_model(inputs)
-        for time, path in zip(times, paths):
-            # print(float(path[0]))
-            # print(float(path[1]))
-            # print(float(time))
-            # print(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-            pyautogui.moveTo(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-        print(f'expected to go to {finalx}, {finaly}')
-        print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
-
-=======
->>>>>>> 8c23e4df33aa56f59a9e3abb7328aae035e154bc
     def _human_move_bez(self, finalx, finaly, deviation=6):
         game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
 

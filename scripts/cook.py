@@ -34,3 +34,6 @@ def cook(num_items, action_key='space',activity_timer=59):
         B.easy_move(locations[4])
         B.easy_click()
         B.print_sleep(1)
+
+if __name__ == "__main__":
+    cook(28*4, action_key='space',activity_timer=59)
