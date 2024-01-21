@@ -1,4 +1,4 @@
-import time
+ import time
 
 from scripts import *
 import ocr.ocr_core

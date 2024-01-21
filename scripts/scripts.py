@@ -81,7 +81,7 @@ def last_heal_time(coords_list, time_elapsed, start_time, consumed_list, consume
     for i in range(2):
         if coords_list[i]:
             B.check_and_consume(i, consumed_timer, coords_list, consumed_list, time_elapsed)
-    if time.time() - last_heal > 30:
+    if time.time() - last_heal > 25:
         B.flick_pray(rapid_heal)
         last_heal = time.time()
     return last_heal
@@ -101,10 +101,11 @@ def drop_inventory(xrange=range(0,28), goto_inven=True):
         except:
             pass
 
-def prif_fish(xtime = 4.5 * 60 *60, activity_timer = 125):
+def prif_fish(activity_timer = 115):
     fish_spot = [922, 859]
+    xtime = 4 * 60 * 60
     time.sleep(2)
-    for i in range(math.floor( xtime//(activity_timer+30))):
+    for i in range(math.floor( xtime//(activity_timer+40))):
         B.easy_move(fish_spot)
         print_sleep(random.normalvariate(0.3, 0.05))
         B.easy_click()
@@ -318,11 +319,11 @@ def clean_and_make_potions(num_herbs):
         B.print_sleep(1)
 
 def fletch(num_items, action_key='3',activity_timer=45):
-    locations = [[714, 160], [1776, 915], [1818, 915], [1270, 533], [1019, 841]]
+    locations = coordinates.fletch_locations
     print('initiating...')
     B.print_sleep(5)
     for i in range(int(num_items // 27)):
-        print('on hides number: ' + str(i * 28))
+        print('on hides number: ' + str(i * 27))
         # withdraw
         B.easy_move(locations[0])
         B.easy_click()
@@ -351,7 +352,8 @@ def fletch(num_items, action_key='3',activity_timer=45):
 
 
 def cook(num_items, action_key='space',activity_timer=59):
-    locations = [[711, 160], [1739, 843], [912, 426], [669, 550], [1019, 841]]
+    locations = [[713, 173], [1235, 649], [955, 435], [1017, 854]]
+
     print('initiating...')
     B.print_sleep(3)
     for i in range(int(num_items // 28)):
@@ -365,19 +367,16 @@ def cook(num_items, action_key='space',activity_timer=59):
         # clean herbs!!
         B.easy_move(locations[1])
         B.easy_click()
-        B.print_sleep(random.normalvariate(1, .05))
-        B.easy_move(locations[2])
-        B.easy_click()
         B.print_sleep(random.normalvariate(1.5, .1))
         B.easy_press(action_key)
         wait_time = 0
         while wait_time < activity_timer:
             wait_time = random.normalvariate(activity_timer + 3, 1)
         B.print_sleep(wait_time)
-        B.easy_move(locations[3])
+        B.easy_move(locations[2])
         B.easy_click()
         B.print_sleep(random.normalvariate(1.5, .2))
-        B.easy_move(locations[4])
+        B.easy_move(locations[3])
         B.easy_click()
         B.print_sleep(1)
 
@@ -420,6 +419,23 @@ def superheat(num_seaweed):
         B.print_sleep(random.normalvariate(.5, .05))
 
 
+def smelt_cannonball(num_steel_bar):
+    B.print_sleep(3)
+    for i in range(num_steel_bar // 26):
+        print(f'on steelbar number {i * 26}')
+        B.easy_move(coordinates.first_bank_spot)
+        B.print_sleep(random.normalvariate(0.25, 0.2))
+        B.easy_click()
+        B.easy_move(coordinates.prif_furnace)
+        B.print_sleep(random.normalvariate(0.25, 0.2))
+        B.easy_click()
+        B.print_sleep(random.normalvariate(5, 0.3))
+        B.easy_press('space')
+        B.print_sleep(random.normalvariate(90, 1))
+        B.easy_move(coordinates.prif_bank_from_furnace)
+        B.easy_click()
+        B.print_sleep(5, 0.3)
+
 
 def repeat_script(script):
     while True:
@@ -433,9 +449,14 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    # superheat(1390)
-    # clean_and_make_potions(587)
-    # fletch(411, action_key='')
-    # cook(5700, 'space', 59)
-    # runNMZAbsorp("Desktop",0, 0, 325, 335, 12, 9)
-    prif_fish()
+    # superheat(1300)
+    # clean_and_make_potions(1303)
+    # fletch(5500, action_key=False, activity_timer=50)
+    # cook(6000, 'space', 59)
+    cook(3261, 'space', 59)
+    # runNMZAbsorp("Desktop",0, 0, 310, 207, 10, 13)
+    # runNMZAbsorp("Desktop", 0, 0, 310, 377, 15, 9)
+    # drop_inventory(range(0,26))
+    # prif_fish(105)
+
+
