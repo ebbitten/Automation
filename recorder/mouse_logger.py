@@ -4,8 +4,20 @@ import time
 
 from pynput.mouse import Listener, Button, Controller
 import pandas as pd
+import os
 
-logging.basicConfig(filename=f'../data/mouse_training/{datetime.today().strftime("%d_%m_%Y")}.csv',
+# Define the directory path
+directory = '/home/adam/VScodeProjects/data/mouse_training/'
+
+# Check if the directory exists, and create it if it doesn't
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
+# Now set up the logging with the file path
+logging.basicConfig(filename=f'{directory}{datetime.today().strftime("%d_%m_%Y")}.csv', level=logging.DEBUG, format='%(message)s')
+
+
+logging.basicConfig(filename=f'{directory}{datetime.today().strftime("%d_%m_%Y")}.csv',
                     level=logging.DEBUG, format='%(message)s')
 
 

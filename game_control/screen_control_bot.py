@@ -3,7 +3,8 @@ from recorder.mouse_over import get_coord
 import pyautogui
 import torch
 import numpy
-from natural_mouse_movements import init_model
+from gpt_mouse_move.mouse_movement_simulation import simulate_mouse_movement_from_model
+
 import game_control.mouse_control.bezmouse
 from pathlib import Path
 from ocr import ocr_core
@@ -116,8 +117,8 @@ class ScreenBot():
     def easy_move(self, location, text="", tolerance=4, deviation=4):
         # while math.dist(pyautogui.position(), location)>tolerance:
         #     self._human_move_bez(location[0], location[1], deviation)
-        self._human_move_bez(location[0], location[1], deviation+4)
-        self._human_move_bez(location[0], location[1], deviation)
+        self._human_move_ml(location[0], location[1])
+
         self.is_moving = True
         self.cur_fails = 0
         if text:
@@ -143,25 +144,21 @@ class ScreenBot():
                 self.retry_move(location[0], location[1])
 
 
-    def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
-        self.prev_pos = self.cur_pos
-        starting_pos = pyautogui.position()
-        screen_size = pyautogui.size()
-        values = ((finalx - starting_pos[0])/screen_size[0],
-                  (finaly - starting_pos[1])/screen_size[1])
-        numpy_values = numpy.array(values).reshape(1,2)
-        inputs = torch.Tensor(numpy_values)
-        print(inputs)
-        times = self.time_model(inputs).reshape(100)
-        paths = self.path_model(inputs)
-        for time, path in zip(times, paths):
-            # print(float(path[0]))
-            # print(float(path[1]))
-            # print(float(time))
-            # print(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-            pyautogui.moveTo(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-        print(f'expected to go to {finalx}, {finaly}')
-        print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
+
+    def _human_move_ml(self, finalx, finaly):
+        # Assuming the start point is the current mouse position
+        start_point = pyautogui.position()
+        end_point = (finalx, finaly)
+
+        try:
+            # Attempt to move using the ML model
+            simulate_mouse_movement_from_model(start_point, end_point, self.model)
+        except Exception as e:
+            print(f"ML-based movement failed: {e}")
+            # Fallback to Bezier movement in case of failure
+            self._human_move_bez(location[0], location[1], deviation+4)
+            self._human_move_bez(location[0], location[1], deviation)
+
 
     def _human_move_bez(self, finalx, finaly, deviation=6):
         game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
