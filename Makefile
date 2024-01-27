@@ -3,3 +3,6 @@ capture-left-click:
 
 github-push:
 	git push https://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@github.com/ebbitten/Automation.git
+
+start-ssh-server:
+	sudo service ssh start
