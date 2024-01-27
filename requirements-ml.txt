@@ -25,7 +25,7 @@ fastcore==1.5.14
 fastdownload==0.0.7
 fastjsonschema==2.16.1
 fastprogress==1.0.3
-fonttools==4.34.4
+fonttools==4.43.0
 certifi==2022.12.7
 charset-normalizer==3.0.1
 fuzzywuzzy==0.18.0
