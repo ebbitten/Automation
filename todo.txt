@@ -1,0 +1,3 @@
+try updating model to have 2 inputs (first and last point)
+try to figure out if its actually using the derived features?
+backup linux system
