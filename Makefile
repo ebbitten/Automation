@@ -6,3 +6,6 @@ github-push:
 
 start-ssh-server:
 	sudo service ssh start
+
+start ssh-client:
+	ssh -X adam@192.168.50.239
