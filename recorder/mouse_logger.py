@@ -4,10 +4,16 @@ import time
 
 from pynput.mouse import Listener, Button, Controller
 import pandas as pd
+from dotenv import load_dotenv
 import os
 
-# Define the directory path
-directory = '/home/adam/VScodeProjects/data/mouse_training/'
+# Load the environment variables from .env file
+load_dotenv()
+
+# Define the directory path from environment variable
+directory = os.getenv('MOUSE_TRAINING_DIR')
+
+
 
 # Check if the directory exists, and create it if it doesn't
 if not os.path.exists(directory):
@@ -15,10 +21,6 @@ if not os.path.exists(directory):
 
 # Now set up the logging with the file path
 logging.basicConfig(filename=f'{directory}{datetime.today().strftime("%d_%m_%Y")}.csv', level=logging.DEBUG, format='%(message)s')
-
-
-logging.basicConfig(filename=f'{directory}{datetime.today().strftime("%d_%m_%Y")}.csv',
-                    level=logging.DEBUG, format='%(message)s')
 
 
 def on_move(x, y):
