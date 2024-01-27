@@ -1,3 +1,6 @@
-try updating model to have 2 inputs (first and last point)
-try to figure out if its actually using the derived features?
 backup linux system
+is there also a way to make the sequence lenght a parameter that could be part of the grid search? I imagine I'd also need to update the preprocessing code
+also have different weights for creating the loss function be hyperparameters
+
+
+try to figure out if its actually using the derived features?
