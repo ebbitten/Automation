@@ -1,7 +1,11 @@
+import sys
 import json
 import time
 import pyautogui
-from utility.macro import print_sleep
+sys.path.append('/home/adam/VScodeProjects/Automation')
+# from game_control.screen_control_bot import print_sleep
+from game_control import ScreenBot
+print_sleep = ScreenBot.print_sleep
 from operating_system import beep
 from pathlib import Path
 

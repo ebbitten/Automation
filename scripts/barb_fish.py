@@ -1,4 +1,5 @@
  import time
+from game_control.screen_control_bot import print_sleep
 
 from scripts import *
 import ocr.ocr_core

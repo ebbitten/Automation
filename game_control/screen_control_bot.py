@@ -1,14 +1,14 @@
-import utility.macro
 from operating_system.ubuntu_os import start_runelite
 from recorder.mouse_over import get_coord
-from utility.macro import print_sleep
 import pyautogui
 import torch
 import numpy
-from natural_mouse_movements import init_model
+from gpt_mouse_move.mouse_movement_simulation import simulate_mouse_movement_from_model
+
 import game_control.mouse_control.bezmouse
 from pathlib import Path
 from ocr import ocr_core
+import ocr
 import os
 import random
 import time
@@ -43,8 +43,27 @@ COORDS ={ 'Click Here To Play': [970, 368],
 
 
 }
-BOXES = {
-}
+
+
+
+class FailedMoveAttempt(Exception):
+    "Raised when there's too many failed movement attempts"
+    pass
+
+
+def print_sleep(time_to_sleep):
+    print("time to sleep: ", time_to_sleep)
+    time.sleep(time_to_sleep)
+
+
+def random_sleep(multiplier=1):
+    val = random.random()
+    if val < multiplier * .01:
+        print_sleep(abs(random.normalvariate(40, 5)))
+    elif val < multiplier *.05:
+        print_sleep(abs(random.normalvariate(7, 3)))
+    else:
+        print_sleep(abs(random.normalvariate(2,1)))
 
 
 class ScreenBot():
@@ -62,14 +81,14 @@ class ScreenBot():
         self.take_failed_screen = take_failed_screen
         self.take_success_screen = take_success_screen
         self.is_moving = False
-        self.print_sleep = utility.macro.print_sleep
-        self.random_sleep = utility.macro.random_sleep
+        self.print_sleep = print_sleep
+        self.random_sleep = random_sleep
 
     def click_wait(self, num):
         for i in range(num):
             self.easy_click()
             print_sleep(abs(random.normalvariate(1.4, .1)))
-            utility.macro.random_sleep()
+            self.random_sleep()
 
     def random_browsing(self):
         final_x, final_y = get_coord()
@@ -98,8 +117,8 @@ class ScreenBot():
     def easy_move(self, location, text="", tolerance=4, deviation=4):
         # while math.dist(pyautogui.position(), location)>tolerance:
         #     self._human_move_bez(location[0], location[1], deviation)
-        self._human_move_bez(location[0], location[1], deviation+4)
-        self._human_move_bez(location[0], location[1], deviation)
+        self._human_move_ml(location[0], location[1])
+
         self.is_moving = True
         self.cur_fails = 0
         if text:
@@ -125,25 +144,21 @@ class ScreenBot():
                 self.retry_move(location[0], location[1])
 
 
-    def _human_move_ml(self, finalx, finaly, totalTime, steps, jiggle=False):
-        self.prev_pos = self.cur_pos
-        starting_pos = pyautogui.position()
-        screen_size = pyautogui.size()
-        values = ((finalx - starting_pos[0])/screen_size[0],
-                  (finaly - starting_pos[1])/screen_size[1])
-        numpy_values = numpy.array(values).reshape(1,2)
-        inputs = torch.Tensor(numpy_values)
-        print(inputs)
-        times = self.time_model(inputs).reshape(100)
-        paths = self.path_model(inputs)
-        for time, path in zip(times, paths):
-            # print(float(path[0]))
-            # print(float(path[1]))
-            # print(float(time))
-            # print(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-            pyautogui.moveTo(float(path[0])*screen_size[0], float(path[1])*screen_size[1], float(time))
-        print(f'expected to go to {finalx}, {finaly}')
-        print(f'actually went to {pyautogui.position()[0]}, {pyautogui.position()[1]}')
+
+    def _human_move_ml(self, finalx, finaly):
+        # Assuming the start point is the current mouse position
+        start_point = pyautogui.position()
+        end_point = (finalx, finaly)
+
+        try:
+            # Attempt to move using the ML model
+            simulate_mouse_movement_from_model(start_point, end_point, self.model)
+        except Exception as e:
+            print(f"ML-based movement failed: {e}")
+            # Fallback to Bezier movement in case of failure
+            self._human_move_bez(location[0], location[1], deviation+4)
+            self._human_move_bez(location[0], location[1], deviation)
+
 
     def _human_move_bez(self, finalx, finaly, deviation=6):
         game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
@@ -177,96 +192,91 @@ class ScreenBot():
             except:
                 pass
 
-    def flick_pray(self, rapidHeal):
-        randInterval = random.randint(20, 30) / 100
-        pyautogui.press('f5', interval=randInterval)
-        time.sleep(random.randint(25, 35) / 100)
-        randInterval = random.normalvariate(25, 3) / 10
-        self.easy_move((rapidHeal[0], rapidHeal[1]))
-        self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
-        time.sleep(random.randint(150, 200) / 100)
-        self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
-        time.sleep(random.normalvariate(175, 15) / 100)
-        randInterval = random.normalvariate(25, 3) / 100
-        pyautogui.press('esc', interval=randInterval)
+def flick_pray(self, rapidHeal):
+    randInterval = random.randint(20, 30) / 100
+    pyautogui.press('f5', interval=randInterval)
+    time.sleep(random.randint(25, 35) / 100)
+    randInterval = random.normalvariate(25, 3) / 10
+    self.easy_move((rapidHeal[0], rapidHeal[1]))
+    self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+    time.sleep(random.randint(150, 200) / 100)
+    self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
+    time.sleep(random.normalvariate(175, 15) / 100)
+    randInterval = random.normalvariate(25, 3) / 100
+    pyautogui.press('esc', interval=randInterval)
 
 
-    def check_and_consume(self, consumed_type, consumed_timer, coords_list, consumed_list, time_elapsed):
-        if time_elapsed - consumed_timer[consumed_type] * consumed_list[consumed_type] > consumed_timer[consumed_type]:
-            typename = ["Overload", "Prayer Potion"]
-            print(("Drinking " + str(typename[consumed_type]) + "\n") * 3)
-            time.sleep(2)
-            # move to our potion
-            x = coords_list[consumed_type][0][0] + random.normalvariate(0, 2)
-            y = coords_list[consumed_type][0][1] + random.normalvariate(0, 2)
-            moveTime = random.randrange(20, 40, 1) / 10
-            self.easy_move((x, y))
-            # click
-            time.sleep(.25)
-            self._do_click(duration=random.normalvariate(20, 3) / 100)
-            time.sleep(.5)
-            # Move to a random location occasionly
-            # update our consumption
+def check_and_consume(self, consumed_type, consumed_timer, coords_list, consumed_list, time_elapsed):
+    if time_elapsed - consumed_timer[consumed_type] * consumed_list[consumed_type] > consumed_timer[consumed_type]:
+        typename = ["Overload", "Prayer Potion"]
+        print(("Drinking " + str(typename[consumed_type]) + "\n") * 3)
+        time.sleep(2)
+        # move to our potion
+        x = coords_list[consumed_type][0][0] + random.normalvariate(0, 2)
+        y = coords_list[consumed_type][0][1] + random.normalvariate(0, 2)
+        moveTime = random.randrange(20, 40, 1) / 10
+        self.easy_move((x, y))
+        # click
+        time.sleep(.25)
+        self._do_click(duration=random.normalvariate(20, 3) / 100)
+        time.sleep(.5)
+        # Move to a random location occasionly
+        # update our consumption
+        consumed_list[consumed_type] += 1
+        if consumed_list[consumed_type] % 4 == 0:
+            coords_list[consumed_type].pop(0)
+        if typename[consumed_type] == "Overload" and len(coords_list[consumed_type]) == 1 and consumed_list[
+            consumed_type] % 4 == 3:
+            coords_list[consumed_type].pop(0)
             consumed_list[consumed_type] += 1
-            if consumed_list[consumed_type] % 4 == 0:
-                coords_list[consumed_type].pop(0)
-            if typename[consumed_type] == "Overload" and len(coords_list[consumed_type]) == 1 and consumed_list[
-                consumed_type] % 4 == 3:
-                coords_list[consumed_type].pop(0)
-                consumed_list[consumed_type] += 1
-            if random.randint(0, 20) > 18:
-                self.random_browsing()
+        if random.randint(0, 20) > 18:
+            self.random_browsing()
 
-    def click_on_bank(self):
-        self.easy_move(COORDS['Bank'])
-        self.easy_click()
-        pass
+def click_on_bank(self):
+    self.easy_move(COORDS['Bank'])
+    self.easy_click()
+    pass
 
-    def click_on_bank_tab(self, tab=1):
-        tab_coord = COORDS['bank_tab_'+str(tab)]
-        self.easy_move(tab_coord)
-        self.easy_click()
+def click_on_bank_tab(self, tab=1):
+    tab_coord = COORDS['bank_tab_'+str(tab)]
+    self.easy_move(tab_coord)
+    self.easy_click()
 
-    def click_deposit_inventory(self):
-        self.easy_move(COORDS['Deposit inventory'])
-        self.easy_click()
+def click_deposit_inventory(self):
+    self.easy_move(COORDS['Deposit inventory'])
+    self.easy_click()
 
-    def login(self):
-        if not ocr.ocr_lib.imagesearch('/home/adam/PycharmProjects/Automation/assets/images/Welcome to Runescape.png', .7):
-            self.easy_press('enter')
-            print('Disconnected, adding an extra enter click')
+def login(self):
+    if not ocr.ocr_lib.imagesearch('/home/adam/PycharmProjects/Automation/assets/images/Welcome to Runescape.png', .7):
         self.easy_press('enter')
-        keys = [str(x) for x in os.getenv('PASSWORD')]
-        self.easy_presses(keys)
-        self.easy_press('enter')
-        time.sleep(5)
-        self.easy_move(COORDS['Click Here To Play'])
-        self.easy_click()
-        time.sleep(5)
-        pyautogui.keyDown('down')
-        time.sleep(random.normalvariate(2.2, .2))
-        pyautogui.keyUp('down')
+        print('Disconnected, adding an extra enter click')
+    self.easy_press('enter')
+    keys = [str(x) for x in os.getenv('PASSWORD')]
+    self.easy_presses(keys)
+    self.easy_press('enter')
+    time.sleep(5)
+    self.easy_move(COORDS['Click Here To Play'])
+    self.easy_click()
+    time.sleep(5)
+    pyautogui.keyDown('down')
+    time.sleep(random.normalvariate(2.2, .2))
+    pyautogui.keyUp('down')
 
-    def open_and_login(self):
-        start_runelite()
-        self.login()
+def open_and_login(self):
+    start_runelite()
+    self.login()
 
 
-    def open_login_deposit(self):
-        self.open_and_login()
-        time.sleep(1)
-        self.click_on_bank()
-        time.sleep(1)
-        self.click_on_bank_tab(tab=1)
-        time.sleep(1)
-        self.click_deposit_inventory()
+def open_login_deposit(self):
+    self.open_and_login()
+    time.sleep(1)
+    self.click_on_bank()
+    time.sleep(1)
+    self.click_on_bank_tab(tab=1)
+    time.sleep(1)
+    self.click_deposit_inventory()
 
     
-
-
-class FailedMoveAttempt(Exception):
-    "Raised when there's too many failed movement attempts"
-    pass
 
 
 if __name__ == '__main__':

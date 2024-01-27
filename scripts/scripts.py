@@ -1,17 +1,17 @@
 # requires pyauotgui, pyhook,  pillow,
 import pyautogui, time
-import math
-from game_control import screen_control_bot
 from assets import coordinates
-from utility.macro import print_sleep
-import random
-import operating_system.ubuntu_os
+from game_control import screen_control_bot
 
+from game_control.screen_control_bot import print_sleep
+import random
 pyautogui.FAILSAFE = True
 
 B = screen_control_bot.ScreenBot()
 
 
+<<<<<<< HEAD
+=======
 def runNMZAbsorp(laptopType="Desktop", oversConsumed=0, absorpConsumed=0, overConsumeCounter=310, absorpConsumeCounter=600,
                  numOvers=10, numAbsorps=16):
     # TODO load positions from a file
@@ -87,6 +87,7 @@ def last_heal_time(coords_list, time_elapsed, start_time, consumed_list, consume
     return last_heal
 
 
+>>>>>>> 228ffebe859138671a252dab5e632637ad5ce038
 def drop_inventory(xrange=range(0,28), goto_inven=True):
     if goto_inven:
         B.easy_press('esc')
@@ -101,6 +102,8 @@ def drop_inventory(xrange=range(0,28), goto_inven=True):
         except:
             pass
 
+<<<<<<< HEAD
+=======
 def prif_fish(activity_timer = 115):
     fish_spot = [922, 859]
     xtime = 4 * 60 * 60
@@ -437,6 +440,7 @@ def smelt_cannonball(num_steel_bar):
         B.print_sleep(5, 0.3)
 
 
+>>>>>>> 228ffebe859138671a252dab5e632637ad5ce038
 def repeat_script(script):
     while True:
         try:
@@ -447,8 +451,10 @@ def repeat_script(script):
             print('Restarting')
             time.sleep(random.normalvariate(4 * 3600, 1000))
 
-
 if __name__ == '__main__':
+<<<<<<< HEAD
+    drop_inventory(5)
+=======
     # superheat(1300)
     # clean_and_make_potions(1303)
     # fletch(5500, action_key=False, activity_timer=50)
@@ -460,3 +466,4 @@ if __name__ == '__main__':
     # prif_fish(105)
 
 
+>>>>>>> 228ffebe859138671a252dab5e632637ad5ce038
