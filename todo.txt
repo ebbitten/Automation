@@ -1,6 +1,11 @@
 backup linux system
-is there also a way to make the sequence lenght a parameter that could be part of the grid search? I imagine I'd also need to update the preprocessing code
-also have different weights for creating the loss function be hyperparameters
 
 
-try to figure out if its actually using the derived features?
+make the architecture a parameter by pointing to different files
+test a bidirectional lstm
+test removing the 2 fully connected layers
+test adding time as a feature back in
+
+
+
+stitch together a noisy bezier curve to bridge from the start point and to the end point
