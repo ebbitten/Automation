@@ -382,7 +382,7 @@ def cook(num_items, action_key='space',activity_timer=59):
 
 
 def superheat(num_seaweed,big_seaweed=True):
-    locations = [[759, 490], [809, 490], [795, 544], [1684, 900], [1272, 538], [1021, 844]]
+    locations = coordinates.superheat
     print('initiating...')
     B.print_sleep(3)
     iter_number = 2 if big_seaweed else 13
