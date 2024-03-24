@@ -381,27 +381,35 @@ def cook(num_items, action_key='space',activity_timer=59):
         B.print_sleep(1)
 
 
-def superheat(num_seaweed):
-    locations = [[759, 486], [809, 485], [795, 544], [1684, 900], [1272, 538], [1021, 844]]
+def superheat(num_seaweed,big_seaweed=True):
+    locations = [[759, 490], [809, 490], [795, 544], [1684, 900], [1272, 538], [1021, 844]]
     print('initiating...')
     B.print_sleep(3)
-    for i in range(int(num_seaweed // 2)):
+    iter_number = 2 if big_seaweed else 13
+    for i in range(int(num_seaweed // iter_number)):
         print('on hides number: ' + str(i * 2))
         # withdraw
-        B.easy_move(locations[0])
-        B.easy_click()
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_click()
-        B.easy_move(locations[1])
-        B.easy_click()
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_click()
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_right_click()
-        B.print_sleep(random.normalvariate(.25, .05))
-        B.easy_move(locations[2])
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_click()
+        if big_seaweed:
+            B.easy_move(locations[0])
+            B.easy_click()
+            B.print_sleep(random.normalvariate(.5, .05))
+            B.easy_click()
+            B.easy_move(locations[1])
+            B.easy_click()
+            B.print_sleep(random.normalvariate(.5, .05))
+            B.easy_click()
+            B.print_sleep(random.normalvariate(.5, .05))
+            B.easy_right_click()
+            B.print_sleep(random.normalvariate(.25, .05))
+            B.easy_move(locations[2])
+            B.print_sleep(random.normalvariate(.5, .05))
+            B.easy_click()
+        else:
+            B.easy_move(locations[0])
+            B.easy_click()
+            B.print_sleep(random.normalvariate(.5, .05))
+            B.easy_move(locations[1])
+            B.easy_click()
         # B.close_screen
         B.print_sleep(1)
         B.easy_press('esc')
@@ -449,13 +457,12 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    # superheat(1300)
+    superheat(6252, big_seaweed=False)
     # clean_and_make_potions(1303)
     # fletch(5500, action_key=False, activity_timer=50)
     # cook(6000, 'space', 59)
-    cook(3261, 'space', 59)
-    # runNMZAbsorp("Desktop",0, 0, 310, 207, 10, 13)
-    # runNMZAbsorp("Desktop", 0, 0, 310, 377, 15, 9)
+    # cook(38 01, 'space', 59)
+    # runNMZAbsorp("Desktop", 0, 0, 310, 397, 16, 8)
     # drop_inventory(range(0,26))
     # prif_fish(105)
 
