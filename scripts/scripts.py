@@ -457,7 +457,9 @@ def repeat_script(script):
 
 
 if __name__ == '__main__':
-    superheat(6252, big_seaweed=False)
+    print(time.time())
+    superheat(9500, big_seaweed=False)
+    print(time.time())
     # clean_and_make_potions(1303)
     # fletch(5500, action_key=False, activity_timer=50)
     # cook(6000, 'space', 59)
