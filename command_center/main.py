@@ -1,8 +1,10 @@
 from ..scripts import *
 
 if __name__ == '__main__':
-    fletch()
-    runNMZAbsorp()
+    
+    print(time.time())
+    superheat(9500, big_seaweed=False)
+    print(time.time())
     # superheat(1390)
     # clean_and_make_potions(587)
     # fletch(411, action_key='')
