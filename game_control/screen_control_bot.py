@@ -149,15 +149,15 @@ class ScreenBot():
         # Assuming the start point is the current mouse position
         start_point = pyautogui.position()
         end_point = (finalx, finaly)
-
-        try:
-            # Attempt to move using the ML model
-            simulate_mouse_movement_from_model(start_point, end_point, self.model)
-        except Exception as e:
-            print(f"ML-based movement failed: {e}")
-            # Fallback to Bezier movement in case of failure
-            self._human_move_bez(location[0], location[1], deviation+4)
-            self._human_move_bez(location[0], location[1], deviation)
+        x_offset = random.normalvariate(0,2)
+        y_offset = random.normalvariate(0,2)
+        self._human_move_bez(finalx + x_offset, finaly + y_offset)
+        current_point = pyautogui.position()
+        while ((current_point[0] - finalx)**2 > 16 or (current_point[1] - finaly)**2 > 16):
+            x_offset = random.normalvariate(0, 1)
+            y_offset = random.normalvariate(0, 1)
+            self._human_move_bez(finalx + x_offset, finaly + y_offset)
+            current_point = pyautogui.position()
 
 
     def _human_move_bez(self, finalx, finaly, deviation=6):

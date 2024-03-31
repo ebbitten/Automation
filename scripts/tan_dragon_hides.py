@@ -1,4 +1,4 @@
-from scripts.scripts import B
+from scripts.script_master import B
 
 
 def tan_dragon_hides(hides, computer="Y570"):

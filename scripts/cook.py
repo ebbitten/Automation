@@ -1,11 +1,12 @@
-from scripts.scripts import B
+from scripts.script_master import B
+import assets.coordinates as C
 
 
 import random
 
-
+#up = east full zoom
 def cook(num_items, action_key='space',activity_timer=59):
-    locations = [[711, 160], [1739, 843], [912, 426], [669, 550], [1019, 841]]
+    locations = C.cook
     print('initiating...')
     B.print_sleep(3)
     for i in range(int(num_items // 28)):
@@ -19,19 +20,16 @@ def cook(num_items, action_key='space',activity_timer=59):
         # clean herbs!!
         B.easy_move(locations[1])
         B.easy_click()
-        B.print_sleep(random.normalvariate(1, .05))
-        B.easy_move(locations[2])
-        B.easy_click()
         B.print_sleep(random.normalvariate(1.5, .1))
         B.easy_press(action_key)
         wait_time = 0
         while wait_time < activity_timer:
             wait_time = random.normalvariate(activity_timer + 3, 1)
         B.print_sleep(wait_time)
-        B.easy_move(locations[3])
+        B.easy_move(locations[2])
         B.easy_click()
         B.print_sleep(random.normalvariate(1.5, .2))
-        B.easy_move(locations[4])
+        B.easy_move(locations[3])
         B.easy_click()
         B.print_sleep(1)
 

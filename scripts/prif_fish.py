@@ -1,4 +1,4 @@
-from scripts.scripts import B, drop_inventory
+from scripts.script_master import B, drop_inventory
 from game_control.screen_control_bot import print_sleep
 
 

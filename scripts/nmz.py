@@ -1,4 +1,4 @@
-from scripts.scripts import B
+from scripts.script_master import B
 
 
 import time

@@ -3,9 +3,6 @@ import json
 import time
 import pyautogui
 sys.path.append('/home/adam/VScodeProjects/Automation')
-# from game_control.screen_control_bot import print_sleep
-from game_control import ScreenBot
-print_sleep = ScreenBot.print_sleep
 from operating_system import beep
 from pathlib import Path
 
@@ -29,11 +26,12 @@ def get_coord():
     return [x, y]
 
 
-def find_coordinates(num_spots, file_path=Path('../data/mouse_recordings/scratch.txt')):
-    print_sleep(3)
+def find_coordinates(num_spots, file_path=Path('data/mouse_recordings/scratch.txt')):
+    time.sleep(3)
     coords = []
     for i in range(num_spots):
         new_coord = get_coord()
+        print(new_coord)
         coords.append(new_coord)
     beep()
     print(coords)
@@ -42,4 +40,4 @@ def find_coordinates(num_spots, file_path=Path('../data/mouse_recordings/scratch
 
 
 if __name__ == '__main__':
-    find_coordinates(6)
+    find_coordinates(5)

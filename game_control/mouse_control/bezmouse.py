@@ -3,7 +3,7 @@ import os, subprocess
 from time import sleep
 from random import randint, choice
 from math import ceil
-from game_control import remove_dups, draw_points
+# from game_control import remove_dups, draw_points
 from multiprocessing import Process
 
 # WORKING DIRECTORY

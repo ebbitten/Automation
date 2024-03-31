@@ -8,6 +8,7 @@ import random
 pyautogui.FAILSAFE = True
 
 B = screen_control_bot.ScreenBot()
+import scripts
 
 
 def drop_inventory(xrange=range(0,28), goto_inven=True):
@@ -36,10 +37,16 @@ def repeat_script(script):
 
 if __name__ == '__main__':
     print('hello')
+    # scripts.humidify(1000)
     # clean_and_make_potions(1303)
     # fletch(5500, action_key=False, activity_timer=50)
     # cook(6000, 'space', 59)
-    # cook(38 01, 'space', 59)
+    start_time = time.time()
+    print(start_time)
+    scripts.cook(7000, 'space', 59)
+    end_time = time.time()
+    print((end_time))
+    print((end_time-start_time)/3600)
     # runNMZAbsorp("Desktop", 0, 0, 310, 397, 16, 8)
     # drop_inventory(range(0,26))
     # prif_fish(105)
