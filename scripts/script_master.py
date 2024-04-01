@@ -40,7 +40,6 @@ if __name__ == '__main__':
     # scripts.humidify(1000)
     # clean_and_make_potions(1303)
     # fletch(5500, action_key=False, activity_timer=50)
-    # cook(6000, 'space', 59)
     start_time = time.time()
     print(start_time)
     scripts.cook(7000, 'space', 59)
