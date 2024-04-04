@@ -37,12 +37,14 @@ def repeat_script(script):
 
 if __name__ == '__main__':
     print('hello')
-    # scripts.humidify(1000)
+
     # clean_and_make_potions(1303)
     # fletch(5500, action_key=False, activity_timer=50)
     start_time = time.time()
     print(start_time)
     scripts.cook(7000, 'space', 59)
+    # scripts.humidify(1450)
+    # scripts.superheat(9500, big_seaweed=False)
     end_time = time.time()
     print((end_time))
     print((end_time-start_time)/3600)
