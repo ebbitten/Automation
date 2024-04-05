@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # fletch(5500, action_key=False, activity_timer=50)
     start_time = time.time()
     print(start_time)
-    scripts.cook(7000, 'space', 59)
+    scripts.cook(6500, 'space', 59)
     # scripts.humidify(1450)
     # scripts.superheat(9500, big_seaweed=False)
     end_time = time.time()
