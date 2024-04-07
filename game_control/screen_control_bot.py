@@ -3,8 +3,6 @@ from recorder.mouse_over import get_coord
 import pyautogui
 import torch
 import numpy
-from gpt_mouse_move.mouse_movement_simulation import simulate_mouse_movement_from_model
-
 import game_control.mouse_control.bezmouse
 from pathlib import Path
 from ocr import ocr_core
@@ -21,29 +19,6 @@ MAX_FAILED_MOVE_ATTEMPTS = 15
 FAILED_MOVE_ATTEMPTS = 0
 FAILED_MOVE_ATTEMPTS = 0
 MAX_FAILED_MOVE_ATTEMPTS = 0
-
-# T470s with screen
-# COORDS ={ 'Click Here To Play': [937, 491],
-#           'Bank': [950, 499],
-#           'bank_tab_1': [559, 116],
-#           'Deposit inventory': [1042, 733]
-#
-#
-# }
-# BOXES = {
-# 'Welcome to Runescape': (800, 381, 252, 39)
-# }
-
-# Y580
-
-COORDS ={ 'Click Here To Play': [970, 368],
-          'Bank': [960, 521],
-          'bank_tab_1': [709, 127],
-          'Deposit inventory': [1032, 846]
-
-
-}
-
 
 
 class FailedMoveAttempt(Exception):
@@ -87,7 +62,7 @@ class ScreenBot():
     def click_wait(self, num):
         for i in range(num):
             self.easy_click()
-            print_sleep(abs(random.normalvariate(1.4, .1)))
+            print_sleep(abs(random.normalvariate(0.6, .1)))
             self.random_sleep()
 
     def random_browsing(self):
@@ -117,7 +92,7 @@ class ScreenBot():
     def easy_move(self, location, text="", tolerance=4, deviation=4):
         # while math.dist(pyautogui.position(), location)>tolerance:
         #     self._human_move_bez(location[0], location[1], deviation)
-        self._human_move_ml(location[0], location[1])
+        self._human_move_bez(location[0], location[1])
 
         self.is_moving = True
         self.cur_fails = 0
@@ -143,25 +118,32 @@ class ScreenBot():
             else:
                 self.retry_move(location[0], location[1])
 
-
-
-    def _human_move_ml(self, finalx, finaly):
-        # Assuming the start point is the current mouse position
-        start_point = pyautogui.position()
-        end_point = (finalx, finaly)
-        x_offset = random.normalvariate(0,2)
-        y_offset = random.normalvariate(0,2)
-        self._human_move_bez(finalx + x_offset, finaly + y_offset)
+    def _human_move_bez(self, finalx, finaly, width=4, height=5, deviation=6, tolerance=16):
         current_point = pyautogui.position()
-        while ((current_point[0] - finalx)**2 > 16 or (current_point[1] - finaly)**2 > 16):
-            x_offset = random.normalvariate(0, 1)
-            y_offset = random.normalvariate(0, 1)
-            self._human_move_bez(finalx + x_offset, finaly + y_offset)
+        while ((current_point[0] - finalx) ** 2 > tolerance or (current_point[1] - finaly) ** 2 > tolerance):
+            self._move_to_target(finalx, finaly, width, height, deviation)
             current_point = pyautogui.position()
 
+    def _move_to_target(self, finalx, finaly, width, height, deviation):
+        current_point = pyautogui.position()
+        distance = math.sqrt((finalx - current_point[0]) ** 2 + (finaly - current_point[1]) ** 2)
+        speed = self._adjust_speed_based_on_distance(distance)
+        x_offset = random.normalvariate(0, 2)
+        y_offset = random.normalvariate(0, 2)
+        game_control.mouse_control.bezmouse.move_to_area(finalx + x_offset, finaly + y_offset, width=width,
+                                                         height=height, deviation=deviation, speed=speed)
 
-    def _human_move_bez(self, finalx, finaly, deviation=6):
-        game_control.mouse_control.bezmouse.move_to_area(finalx, finaly, 4, 5, deviation, 5)
+    def _adjust_speed_based_on_distance(self, distance):
+        # Implementing a non-linear speed adjustment based on the distance to target
+        # Faster for very short distances, with a gradual decrease in speed for longer distances
+        if distance < 50:
+            return 4  # Faster for very short distances
+        elif distance < 200:
+            return max(3, 4 - (distance - 50) / 150 * 1)  # Gradually reducing speed for moderate distances
+        else:
+            return 1  # Standard speed for longer distances
+
+
 
     def easy_press(self, key):
         pyautogui.press(key, interval=(random.normalvariate(25, 5) / 100))
