@@ -1,7 +1,7 @@
 certifi==2022.12.7
 charset-normalizer==3.0.1
 fuzzywuzzy==0.18.0
-idna==3.4
+idna==3.7
 Levenshtein==0.20.9
 more-itertools==9.1.0
 MouseInfo==0.1.3
