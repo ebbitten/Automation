@@ -209,7 +209,7 @@ def move(mouse_points, draw=False, rand_err=True):
 
     fname = 'mouse.sh'
 
-    outfile = open(CWD + '/tmp/' + fname, 'w')
+    outfile = open(CWD + '/tmp/' + fname, 'w+')
     os.system('chmod +x ' + CWD + '/tmp/' + fname)
     outfile.write('#!/bin/bash')
     outfile.write('\n\n')
