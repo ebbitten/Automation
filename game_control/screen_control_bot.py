@@ -137,11 +137,11 @@ class ScreenBot():
         # Implementing a non-linear speed adjustment based on the distance to target
         # Faster for very short distances, with a gradual decrease in speed for longer distances
         if distance < 50:
-            return 4  # Faster for very short distances
+            return 1  # Faster for very short distances
         elif distance < 200:
-            return max(3, 4 - (distance - 50) / 150 * 1)  # Gradually reducing speed for moderate distances
+            return round(4/(max(3, 4 - (distance - 50) / 150 * 1)))  # Gradually reducing speed for moderate distances
         else:
-            return 1  # Standard speed for longer distances
+            return 4  # Standard speed for longer distances
 
 
 
