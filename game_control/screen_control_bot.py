@@ -152,11 +152,6 @@ class ScreenBot():
         for key in keys:
             self.easy_press(key)
 
-    def easy_mk(self, numkey):
-        dist = 32
-        if numkey == 'num2':
-            pyautogui.moveRel(0,35,.5).main()
-
     def easy_click(self):
         self._do_click(clicks=1, duration=(random.normalvariate(25, 3) / 100))
 
