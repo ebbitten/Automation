@@ -10,15 +10,13 @@ def humidify(num_seeds):
     locations = C.humidify
     print('initiating...')
     B.print_sleep(3)
-    for i in range(int(num_seeds // 25)):
-        print('on seed number: ' + str(i * 25))
+    for i in range(int(num_seeds // 27)):
+        print('on seed number: ' + str(i * 27))
         # withdraw
         B.easy_move(locations[0])
         B.easy_click()
         B.print_sleep(random.normalvariate(.5, .05))
         B.easy_press('esc')
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_press('f2')
         # Plant Seeds update
         B.print_sleep(random.normalvariate(.5, .05))
         B.easy_move(locations[1])
@@ -31,23 +29,6 @@ def humidify(num_seeds):
             B.easy_click()
             B.print_sleep(random.normalvariate(.5, .05))
             start_spot, move_spot = move_spot, start_spot
-        
-        # Plant Seeds
-        # for i in range(25):
-        #     B.easy_move(locations[1])
-        #     B.print_sleep(random.normalvariate(.5, .05))
-        #     B.easy_click()
-        #     B.print_sleep(random.normalvariate(.5, .05))
-        #     B.easy_move(locations[2])
-        #     B.print_sleep(random.normalvariate(.5, .05))
-        #     B.easy_click()
-        #     B.print_sleep(random.normalvariate(.5, .05))
-        # Humidify
-        B.easy_press('f4')
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_move(locations[3])
-        B.print_sleep(random.normalvariate(.5, .05))
-        B.easy_click()
         # Bank
         B.print_sleep(random.normalvariate(2.0, .2))
         B.easy_move(locations[4])
