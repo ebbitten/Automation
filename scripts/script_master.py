@@ -43,10 +43,12 @@ if __name__ == '__main__':
     start_time = time.time()
     print(start_time)
     # scripts.cook(4500, 'space', 59)
-    scripts.humidify(5200)
+    # scripts.humidify(5200)
+    scripts.fletch(5400, action_key='space', activity_timer=82)
     # scripts.superheat(11000, big_seaweed=False)
     # scripts.clean_and_make_potions(28)
     # scripts.fletch(4500, action_key='3', activity_timer=44)
+
     end_time = time.time()
     print((end_time))
     print((end_time-start_time)/3600)
