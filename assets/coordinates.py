@@ -5,7 +5,7 @@ if s.MACHINE == 'ubuntu desktop':
     inventory_button = [3721, 757]
     screen_pyautogui_region = [1920, 0, 1920, 1080]
     textbox_region = [1924, 920, 516, 160]
-    fletch_locations  = [[714, 160], [1776, 915], [1818, 915], [1270, 533], [1019, 841]]
+    fletch_locations  = [[696, 177], [1770, 918], [1808, 913], [1258, 583], [1054, 857]]
     first_bank_spot = [645, 161]
     prif_furnace = [354, 1007]
     prif_bank_from_furnace =[1412, 263]
