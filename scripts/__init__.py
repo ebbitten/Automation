@@ -8,3 +8,4 @@ from .fletch import fletch
 from .superheat import superheat
 from .tan_dragon_hides import tan_dragon_hides
 from .humidify import *
+from .dust_horn import *
