@@ -1,11 +1,11 @@
 from scripts.script_master import B
-
+import assets.coordinates as C
 
 import random
 
 
 def fletch(num_items, action_key='3',activity_timer=45):
-    locations = [[714, 160], [1776, 915], [1818, 915], [1270, 533], [1019, 841]]
+    locations = C.fletch_locations
     print('initiating...')
     B.print_sleep(5)
     for i in range(int(num_items // 27)):

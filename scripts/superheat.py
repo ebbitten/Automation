@@ -1,11 +1,11 @@
 from scripts.script_master import B
 
-from assets.coordinates import coordinates
+import assets.coordinates as C
 import random
 
 
 def superheat(num_seaweed, big_seaweed=False):
-    locations = coordinates.superheat
+    locations = C.superheat
     print('initiating...')
     B.print_sleep(3)
     iter_number = 2 if big_seaweed else 13
